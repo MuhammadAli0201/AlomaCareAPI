@@ -120,7 +120,7 @@ public class PatientCompleteInfo
     public List<string> KmcType { get; set; }
     public List<string> OutcomeSection { get; set; }
     public string HospitalName { get; set; }
-    public List<String> FeedsOnDischarge { get; set; }
+    public List<string> FeedsOnDischarge { get; set; }
     public string HomeOxygen{ get; set; }
     public string DischargeWeight { get; set; }
     public string DurationOfStay { get; set; }
