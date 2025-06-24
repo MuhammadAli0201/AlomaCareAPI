@@ -14,8 +14,7 @@ public class Maternal
     public int age { get; set; }
     public string Parity { get; set; }
     public string Race { get; set; }
-    public string Gravidity { get; set; }
-    public string InitialDiagnosis { get; set; }
+    public string Gravidity { get; set; } 
     public string AntenatalCare { get; set; }
     public string AntenatalSteroid { get; set; }
     public string AntenatalMgSulfate { get; set; }

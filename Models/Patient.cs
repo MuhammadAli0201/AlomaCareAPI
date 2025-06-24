@@ -13,12 +13,15 @@ public class Patient
     public DateTime DateOfAdmission { get; set; }
     public int AgeOnAdmission { get; set; }
     public decimal BirthWeight { get; set; }
+    public string? GestationalUnit { get; set; }
     public int? GestationalAge { get; set; }
     public string Gender { get; set; }
     public string PlaceOfBirth { get; set; }
     public string ModeOfDelivery { get; set; }
     public List<string> InitialResuscitation { get; set; }
-    public List<string> ApgarTimes { get; set; }
+    public string OneMinuteApgar { get; set; }
+    public string FiveMinuteApgar { get; set; }
+    public string TenMinuteApgar { get; set; }
     public string OutcomeStatus { get; set; }
     public string TransferHospital { get; set; }
     public string BirthHivPcr { get; set; }

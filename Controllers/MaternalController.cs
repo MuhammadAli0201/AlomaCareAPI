@@ -45,8 +45,7 @@ public class MaternalController : ControllerBase
         {
             dbEntity.HospitalNumber = maternal.HospitalNumber;
             dbEntity.Parity = maternal.Parity;
-            dbEntity.Gravidity = maternal.Gravidity;
-            dbEntity.InitialDiagnosis = maternal.InitialDiagnosis;
+            dbEntity.Gravidity = maternal.Gravidity; 
             dbEntity.AntenatalCare = maternal.AntenatalCare;
             dbEntity.AntenatalSteroid = maternal.AntenatalSteroid;
             dbEntity.AntenatalMgSulfate = maternal.AntenatalMgSulfate;

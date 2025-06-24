@@ -51,33 +51,30 @@ namespace AlomaCareAPI.Context
                 .WithOne(p => p.CreatedByUser)
                 .HasForeignKey(p => p.CreatedByUserId);
 
-            modelBuilder.Entity<Maternal>()
-                .HasOne(x => x.Patient)
-                .WithOne(x => x.Maternal)
-                .HasForeignKey<Maternal>(x => x.PatientId);
-
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.PatientCompleteInfo)
                 .WithOne(c => c.Patient)
-                .HasForeignKey<PatientCompleteInfo>(c => c.PatientId);
-
+                .HasForeignKey<PatientCompleteInfo>(c => c.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             modelBuilder.Entity<Patient>()
-                .HasOne(p => p.PatientCompleteInfo)
-                .WithOne(pc => pc.Patient)
-                .HasForeignKey<PatientCompleteInfo>(pc => pc.PatientId);
+                .HasOne(p => p.Maternal)
+                .WithOne(c => c.Patient)
+                .HasForeignKey<Maternal>(c => c.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PatientCompleteInfo>()
                 .Property(e => e.CongenitalInfectionOrganism)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
             modelBuilder.Entity<PatientCompleteInfo>()
                 .Property(e => e.BsOrganism)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
             modelBuilder.Entity<PatientCompleteInfo>()
@@ -91,21 +88,21 @@ namespace AlomaCareAPI.Context
                 .Property(e => e.FungalOrganism)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
             modelBuilder.Entity<PatientCompleteInfo>()
                 .Property(e => e.LateSepsisAbx)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
             modelBuilder.Entity<PatientCompleteInfo>()
                 .Property(e => e.SonarFindings)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
             modelBuilder.Entity<PatientCompleteInfo>()

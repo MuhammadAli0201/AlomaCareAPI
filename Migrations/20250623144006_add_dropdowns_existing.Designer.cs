@@ -4,6 +4,7 @@ using AlomaCareAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCareAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250623144006_add_dropdowns_existing")]
+    partial class add_dropdowns_existing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,6 +143,9 @@ namespace AlomaCareAPI.Migrations
                     b.Property<string>("Hypertension")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InitialDiagnosis")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MaternalHiv")
                         .HasColumnType("nvarchar(max)");
 
@@ -254,6 +260,9 @@ namespace AlomaCareAPI.Migrations
                     b.Property<int>("AgeOnAdmission")
                         .HasColumnType("int");
 
+                    b.PrimitiveCollection<string>("ApgarTimes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BirthHivPcr")
                         .HasColumnType("nvarchar(max)");
 
@@ -275,9 +284,6 @@ namespace AlomaCareAPI.Migrations
                     b.Property<bool>("DiedWithin12Hours")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FiveMinuteApgar")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal?>("FootLength")
                         .HasColumnType("decimal(18,2)");
 
@@ -286,9 +292,6 @@ namespace AlomaCareAPI.Migrations
 
                     b.Property<int?>("GestationalAge")
                         .HasColumnType("int");
-
-                    b.Property<string>("GestationalUnit")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("HeadCircumference")
                         .HasColumnType("decimal(18,2)");
@@ -311,9 +314,6 @@ namespace AlomaCareAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OneMinuteApgar")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("OutcomeStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -321,9 +321,6 @@ namespace AlomaCareAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenMinuteApgar")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransferHospital")
@@ -438,7 +435,7 @@ namespace AlomaCareAPI.Migrations
                     b.Property<string>("DurationOfStay")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EarlyAntibiotics")
+                    b.Property<int>("EarlyAntibiotics")
                         .HasColumnType("int");
 
                     b.Property<string>("EosCalcDone")
@@ -750,7 +747,7 @@ namespace AlomaCareAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("Approved")
+                    b.Property<bool>("Approved")
                         .HasColumnType("bit");
 
                     b.Property<int>("UserId")

@@ -97,7 +97,7 @@ namespace AlomaCareAPI.Controllers
                 {
                     UserRoleId = Guid.NewGuid(),
                     UserId = user.Entity.Id,
-                    Approved = false
+                    Approved = null
                 };
                 await _authContext.UserRoles.AddAsync(userRole);
                 await _authContext.SaveChangesAsync();

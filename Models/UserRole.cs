@@ -11,5 +11,5 @@ public sealed class UserRole
 
     [ForeignKey(nameof(UserId))]
     public User User { get; set; }
-    public bool Approved { get; set; }
+    public bool? Approved { get; set; }
 }
