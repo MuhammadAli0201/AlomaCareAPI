@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace AlomaCareAPI.Controllers
 {
@@ -38,12 +39,15 @@ namespace AlomaCareAPI.Controllers
                     dbPatient.DateOfAdmission = patient.DateOfAdmission;
                     dbPatient.AgeOnAdmission = patient.AgeOnAdmission;
                     dbPatient.BirthWeight = patient.BirthWeight;
+                    dbPatient.GestationalUnit = patient.GestationalUnit;
                     dbPatient.GestationalAge = patient.GestationalAge;
                     dbPatient.Gender = patient.Gender;
                     dbPatient.PlaceOfBirth = patient.PlaceOfBirth;
                     dbPatient.ModeOfDelivery = patient.ModeOfDelivery;
                     dbPatient.InitialResuscitation = patient.InitialResuscitation;
-                    dbPatient.ApgarTimes = patient.ApgarTimes;
+                    dbPatient.OneMinuteApgar = patient.OneMinuteApgar;
+                    dbPatient.FiveMinuteApgar = patient.FiveMinuteApgar;
+                    dbPatient.TenMinuteApgar = patient.TenMinuteApgar;
                     dbPatient.OutcomeStatus = patient.OutcomeStatus;
                     dbPatient.TransferHospital = patient.TransferHospital;
                     dbPatient.BirthHivPcr = patient.BirthHivPcr;
@@ -84,6 +88,16 @@ namespace AlomaCareAPI.Controllers
             return Ok(list);
         }
 
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            if (patient == null) return NotFound();
+            context.Patients.Remove(patient);
+            await context.SaveChangesAsync();
+            return Ok(true);
+        }
 
         [Authorize]
         [HttpGet("{id}")]
@@ -94,6 +108,23 @@ namespace AlomaCareAPI.Controllers
                 .FirstOrDefault();
             if (patient == null) return NotFound();
             return Ok(patient);
+        }
+        
+        [Authorize]
+        [HttpGet("search/{searchInput?}")]
+        public async Task<IActionResult> Search(string? searchInput)
+        {
+            if (string.IsNullOrWhiteSpace(searchInput))
+                return Ok(await context.Patients.ToListAsync());
+
+            var search = context.Patients
+                .Where(p =>
+                    p.HospitalNumber.Contains(searchInput) ||
+                    p.Name.Contains(searchInput) ||
+                    p.Surname.Contains(searchInput))
+                .ToList();
+
+            return Ok(search);
         }
     }
 }
