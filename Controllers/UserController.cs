@@ -130,7 +130,7 @@ namespace AlomaCareAPI.Controllers
         private static string CheckPasswordStrength(string pass)
         {
             StringBuilder sb = new StringBuilder();
-            if (pass.Length < 9)
+            if (pass.Length < 8)
                 sb.Append("Minimum password length should be 8" + Environment.NewLine);
             if (!(Regex.IsMatch(pass, "[a-z]") && Regex.IsMatch(pass, "[A-Z]") && Regex.IsMatch(pass, "[0-9]")))
                 sb.Append("Password should be AlphaNumeric" + Environment.NewLine);
