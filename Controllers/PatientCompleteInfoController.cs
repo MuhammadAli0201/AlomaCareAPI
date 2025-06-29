@@ -17,9 +17,6 @@ public class PatientCompleteInfoController(AppDbContext context) : ControllerBas
             .AsNoTracking()
             .FirstOrDefaultAsync(m => m.PatientId == patientId);
 
-        if (patientCompleteInfos == null)
-            return NotFound($"No Patient Complete Infos record for patient {patientId}");
-
         return Ok(patientCompleteInfos);
     }
 
