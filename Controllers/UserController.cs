@@ -20,9 +20,11 @@ namespace AlomaCareAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _authContext;
-        public UserController(AppDbContext appDbContext)
+        private readonly IWebHostEnvironment _environment;
+        public UserController(AppDbContext appDbContext, IWebHostEnvironment environment)
         {
             _authContext = appDbContext;
+            _environment = environment;
         }
 
         [HttpPost("authenticate")]
@@ -173,7 +175,74 @@ namespace AlomaCareAPI.Controllers
             return Ok(await _authContext.Users.ToListAsync());
         }
 
+        private string GetImagePath(string fileName)
+        {
+            return Path.Combine(_environment.WebRootPath, "images", fileName);
+        }
 
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] UserDTO user)
+        {
+            var oldUser = await _authContext.Users.FindAsync(user.Id);
+            if (user == null)
+                return NotFound();
+
+            oldUser.FirstName = user.FirstName;
+            oldUser.LastName = user.LastName;
+            oldUser.Email = user.Email;
+            oldUser.Role = user.Role;
+            if (!string.IsNullOrEmpty(user.ProfileImagePath))
+                user.ProfileImagePath = user.ProfileImagePath;
+
+            await _authContext.SaveChangesAsync();
+            return Ok(user);
+        }
+
+        [HttpPost("upload-profile-pic")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.Sid).Value);
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var user = await _authContext.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound("User not found.");
+
+            var imagesFolder = Path.Combine(_environment.WebRootPath, "images");
+
+            if (!Directory.Exists(imagesFolder))
+                Directory.CreateDirectory(imagesFolder);
+
+            // Create a unique filename (e.g., user123.jpg)
+            var extension = Path.GetExtension(file.FileName);
+            var fileName = $"user_{userId}{extension}";
+            var filePath = Path.Combine(imagesFolder, fileName);
+
+            // Delete old image if it exists
+            if (!string.IsNullOrEmpty(user.ProfileImagePath))
+            {
+                var oldPath = Path.Combine(_environment.WebRootPath, user.ProfileImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                if (System.IO.File.Exists(oldPath))
+                {
+                    System.IO.File.Delete(oldPath);
+                }
+            }
+
+            // Save new image
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Update user record
+            user.ProfileImagePath = $"/images/{fileName}";
+            _authContext.Users.Update(user);
+            await _authContext.SaveChangesAsync();
+
+            return Ok(new { message = "Profile picture updated", imagePath = user.ProfileImagePath }); ;
+        }
 
 
         //Method to view account 
@@ -192,12 +261,13 @@ namespace AlomaCareAPI.Controllers
 
             return Ok(new
             {
+                user.Id,
                 user.FirstName,
                 user.LastName,
                 user.Email,
                 user.Usernumber,
                 user.Role,
-
+                user.ProfileImagePath
             });
         }
 
