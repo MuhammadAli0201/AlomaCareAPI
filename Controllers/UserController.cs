@@ -175,11 +175,6 @@ namespace AlomaCareAPI.Controllers
             return Ok(await _authContext.Users.ToListAsync());
         }
 
-        private string GetImagePath(string fileName)
-        {
-            return Path.Combine(_environment.WebRootPath, "images", fileName);
-        }
-
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] UserDTO user)
