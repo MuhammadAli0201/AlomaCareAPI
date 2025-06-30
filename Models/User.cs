@@ -14,7 +14,7 @@ namespace AlomaCareAPI.Models
         public string Role { get; set; }
         public string Token { get; set; }
         public string ProfileImagePath { get; set; }
-        public string IsVerified { get; set; }
+        public bool IsVerified { get; set; }
         public UserRole UserRole { get; set; }
         public List<Patient> Patients { get; set; }
     }

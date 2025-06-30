@@ -55,6 +55,8 @@ namespace AlomaCareAPI.Controllers
             {
                 Token = user.Token,
                 Role = user.Role,  // Return the role along with the token
+                Email = user.Email,
+                isVerified = user.IsVerified,
                 Message = "Login Success"
             });
         }
@@ -340,6 +342,12 @@ namespace AlomaCareAPI.Controllers
 
             if (latestOtp.ExpiresAtUtc < DateTime.UtcNow)
                 return BadRequest(new { Message = "OTP has expired" });
+
+            if (!user.IsVerified)
+            {
+                await _authContext.Users.Where(u => u.Id == user.Id).ExecuteUpdateAsync(
+                    setters => setters.SetProperty(u => u.IsVerified, true));
+            }
 
             return Ok(new { Message = "OTP verified" });
         }
