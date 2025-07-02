@@ -31,6 +31,14 @@ public class Patient
     public bool DiedInDeliveryRoom { get; set; }
     public bool DiedWithin12Hours { get; set; }
     public decimal? InitialTemperature { get; set; }
+    public string MothersGtNumber { get; set; }
+    public DateTime? DateOfDeath { get; set; }
+    public string ConditionAtBirth { get; set; }
+    public string SyphilisSerology { get; set; }
+    public string SingleOrMultipleBirths { get; set; }
+    public string ObstetricCauseOfDeath { get; set; }
+    public string NeonatalCauseOfDeath { get; set; }
+    public string AvoidableFactors { get; set; }
     [ForeignKey(nameof(CreatedByUser))]
     public int CreatedByUserId { get; set; }
     public User CreatedByUser { get; set; }

@@ -57,6 +57,14 @@ namespace AlomaCareAPI.Controllers
                     dbPatient.DiedInDeliveryRoom = patient.DiedInDeliveryRoom;
                     dbPatient.DiedWithin12Hours = patient.DiedWithin12Hours;
                     dbPatient.InitialTemperature = patient.InitialTemperature;
+                    dbPatient.MothersGtNumber = patient.MothersGtNumber;
+                    dbPatient.DateOfDeath = patient.DateOfDeath;
+                    dbPatient.ConditionAtBirth = patient.ConditionAtBirth;
+                    dbPatient.SyphilisSerology = patient.SyphilisSerology;
+                    dbPatient.SingleOrMultipleBirths = patient.SingleOrMultipleBirths;
+                    dbPatient.ObstetricCauseOfDeath = patient.ObstetricCauseOfDeath;
+                    dbPatient.NeonatalCauseOfDeath = patient.NeonatalCauseOfDeath;
+                    dbPatient.AvoidableFactors = patient.AvoidableFactors;
                     // Do not update CreatedByUserId for updates
 
                     context.Patients.Update(dbPatient);
