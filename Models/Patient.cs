@@ -17,6 +17,10 @@ public class Patient
     public int? GestationalAge { get; set; }
     public string Gender { get; set; }
     public string PlaceOfBirth { get; set; }
+    public string Province { get; set; }
+    public string City { get; set; }
+    public string Suburb { get; set; }
+    public string Hospital { get; set; }
     public string ModeOfDelivery { get; set; }
     public List<string> InitialResuscitation { get; set; }
     public string OneMinuteApgar { get; set; }
