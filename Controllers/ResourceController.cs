@@ -68,7 +68,7 @@ namespace AlomaCareAPI.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            return Ok(new { resourcesCount, filePath, fileName });
+            return Ok(new { resourcesCount, filePath=$"/resources/{fileName}", fileName });
         }
     }
 }
