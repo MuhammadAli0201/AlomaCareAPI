@@ -30,6 +30,7 @@ namespace AlomaCareAPI.Context
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Maternal> Maternals { get; set; }
         public DbSet<PatientCompleteInfo> PatientCompleteInfos { get; set; }
+        public DbSet<HelpResource> HelpResources { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

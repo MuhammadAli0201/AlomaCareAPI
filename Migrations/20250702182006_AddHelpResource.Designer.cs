@@ -4,6 +4,7 @@ using AlomaCareAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCareAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250702182006_AddHelpResource")]
+    partial class AddHelpResource
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -288,9 +291,6 @@ namespace AlomaCareAPI.Migrations
                     b.Property<decimal>("BirthWeight")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConditionAtBirth")
                         .HasColumnType("nvarchar(max)");
 
@@ -330,9 +330,6 @@ namespace AlomaCareAPI.Migrations
                     b.Property<decimal?>("HeadCircumference")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Hospital")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HospitalNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -369,13 +366,7 @@ namespace AlomaCareAPI.Migrations
                     b.Property<string>("PlaceOfBirth")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Province")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SingleOrMultipleBirths")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Suburb")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")

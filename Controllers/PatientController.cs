@@ -43,6 +43,10 @@ namespace AlomaCareAPI.Controllers
                     dbPatient.GestationalAge = patient.GestationalAge;
                     dbPatient.Gender = patient.Gender;
                     dbPatient.PlaceOfBirth = patient.PlaceOfBirth;
+                    dbPatient.Province = patient.Province;
+                    dbPatient.City = patient.City;
+                    dbPatient.Suburb = patient.Suburb;
+                    dbPatient.Hospital = patient.Hospital;
                     dbPatient.ModeOfDelivery = patient.ModeOfDelivery;
                     dbPatient.InitialResuscitation = patient.InitialResuscitation;
                     dbPatient.OneMinuteApgar = patient.OneMinuteApgar;
@@ -57,6 +61,14 @@ namespace AlomaCareAPI.Controllers
                     dbPatient.DiedInDeliveryRoom = patient.DiedInDeliveryRoom;
                     dbPatient.DiedWithin12Hours = patient.DiedWithin12Hours;
                     dbPatient.InitialTemperature = patient.InitialTemperature;
+                    dbPatient.MothersGtNumber = patient.MothersGtNumber;
+                    dbPatient.DateOfDeath = patient.DateOfDeath;
+                    dbPatient.ConditionAtBirth = patient.ConditionAtBirth;
+                    dbPatient.SyphilisSerology = patient.SyphilisSerology;
+                    dbPatient.SingleOrMultipleBirths = patient.SingleOrMultipleBirths;
+                    dbPatient.ObstetricCauseOfDeath = patient.ObstetricCauseOfDeath;
+                    dbPatient.NeonatalCauseOfDeath = patient.NeonatalCauseOfDeath;
+                    dbPatient.AvoidableFactors = patient.AvoidableFactors;
                     // Do not update CreatedByUserId for updates
 
                     context.Patients.Update(dbPatient);
@@ -121,7 +133,8 @@ namespace AlomaCareAPI.Controllers
                 .Where(p =>
                     p.HospitalNumber.Contains(searchInput) ||
                     p.Name.Contains(searchInput) ||
-                    p.Surname.Contains(searchInput))
+                    p.Surname.Contains(searchInput) ||
+                    p.Gender.Contains(searchInput))
                 .ToList();
 
             return Ok(search);
