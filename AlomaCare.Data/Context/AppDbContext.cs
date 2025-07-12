@@ -36,6 +36,41 @@ namespace AlomaCare.Context
         public DbSet<Suburb> Suburbs { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<Unit> Units { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<TypeOfNECSurgeryOption> TypeOfNECSurgeryOptions { get; set; }
+        public DbSet<CoolingTypeOption> CoolingTypeOptions { get; set; }
+        public DbSet<ReasonForNotCoolingOption> ReasonForNotCoolingOptions { get; set; }
+        public DbSet<WhyaEEGNotDoneOption> WhyaEEGNotDoneOptions { get; set; }
+        public DbSet<HIEOption> HIEOptions { get; set; }
+        public DbSet<ParacetamolForPDAOption> ParacetamolForPDAOptions { get; set; }
+        public DbSet<IbuprofenForPDAOption> IbuprofenForPDAOptions { get; set; }
+        public DbSet<PDALitigationOption> PDALitigationOptions { get; set; }
+        public DbSet<ROPFindingsOption> ROPFindingsOptions { get; set; }
+        public DbSet<TypeOfKMCOption> TypeOfKMCOptions { get; set; }
+        public DbSet<OtherNeonatalComplication> OtherNeonatalComplications { get; set; }
+        public DbSet<IntropicSupportOption> IntropicSupportOptions { get; set; }
+        public DbSet<AEEGOption> AEEGOptions { get; set; }
+        public DbSet<CerebralCoolingOption> CerebralCoolingOptions { get; set; }
+        public DbSet<NecrotisingEntrocoliisOption> NecrotisingEntrocoliisOptions { get; set; }
+        public DbSet<ParentalNutritionOption> ParentalNutritionOptions { get; set; }
+        public DbSet<RetinopathyOfPrematurityOption> RetinopathyOfPrematurityOptions { get; set; }
+        public DbSet<ROPSurgeryOption> ROPSurgeryOptions { get; set; }
+        public DbSet<NeonatalJaundiceRequirementOption> NeonatalJaundiceRequirementOptions { get; set; }
+        public DbSet<ExchangeTranfusionOption> ExchangeTranfusionOptions { get; set; }
+        public DbSet<MaxTotalBilirubinLevelOption> MaxTotalBilirubinLevelOptions { get; set; }
+        public DbSet<BloodTransfusionOption> BloodTransfusionOptions { get; set; }
+        public DbSet<PlateletTranfusionOption> PlateletTranfusionOptions { get; set; }
+        public DbSet<FreshFrozenPlasmaOption> FreshFrozenPlasmaOptions { get; set; }
+        public DbSet<MajorBirthDefectOption> MajorBirthDefectOptions { get; set; }
+        public DbSet<KangarooCareOption> KangarooCareOptions { get; set; }
+        public DbSet<Cardiovascular> Cardiovasculars { get; set; }
+        public DbSet<CNS> CNSs { get; set; }
+        public DbSet<Metabolic> Metabolics { get; set; }
+        public DbSet<GlucoseAbnormalities> GlucoseAbnormalities { get; set; }
+        public DbSet<OtherNeonatalComplicationCardiovascular> OtherNeonatalComplicationCardiovasculars { get; set; }
+        public DbSet<OtherNeonatalComplicationCNS> OtherNeonatalComplicationCNSs { get; set; }
+        public DbSet<OtherNeonatalComplicationMetabolic> OtherNeonatalComplicationMetabolics { get; set; }
+        public DbSet<OtherNeonatalComplicationGlucoseAbnormalities> OtherNeonatalComplicationGlucoseAbnormalitiess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
