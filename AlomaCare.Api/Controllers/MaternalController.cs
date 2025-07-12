@@ -15,10 +15,12 @@ namespace AlomaCare.Controllers;
 public class MaternalController : ControllerBase
 {
     private readonly IMaternalRepository repository;
+    private readonly IPatientRepository patientRepository;
 
-    public MaternalController(IMaternalRepository repository)
+    public MaternalController(IMaternalRepository repository, IPatientRepository patientRepository)
     {
         this.repository = repository;
+        this.patientRepository = patientRepository;
     }
 
     [HttpPost]
@@ -31,7 +33,7 @@ public class MaternalController : ControllerBase
         if (userIdClaim == null)
             return Unauthorized();
 
-        var existingPatient = await repository.GetAsync(maternal.PatientId);
+        var existingPatient = await patientRepository.GetAsync(maternal.PatientId);
         if (existingPatient == null)
             return BadRequest($"Patient {maternal.PatientId} not found.");
 

@@ -43,10 +43,10 @@ namespace AlomaCare.Controllers
                     dbPatient.GestationalAge = patient.GestationalAge;
                     dbPatient.Gender = patient.Gender;
                     dbPatient.PlaceOfBirth = patient.PlaceOfBirth;
-                    dbPatient.Province = patient.Province;
-                    dbPatient.City = patient.City;
-                    dbPatient.Suburb = patient.Suburb;
-                    dbPatient.Hospital = patient.Hospital;
+                    dbPatient.ProvinceId = patient.ProvinceId;
+                    dbPatient.CityId = patient.CityId;
+                    dbPatient.SuburbId = patient.SuburbId;
+                    dbPatient.HospitalId = patient.HospitalId;
                     dbPatient.ModeOfDelivery = patient.ModeOfDelivery;
                     dbPatient.InitialResuscitation = patient.InitialResuscitation;
                     dbPatient.OneMinuteApgar = patient.OneMinuteApgar;

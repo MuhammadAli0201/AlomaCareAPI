@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AlomaCare.Data.Repositories
 {
-    public interface ICongenitalInfectionOrganism : IRepository<CongenitalInfectionOrganism>
+    public interface IPatientRepository : IRepository<Patient>
     {
     }
 }

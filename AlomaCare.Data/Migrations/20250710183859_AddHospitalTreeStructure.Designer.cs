@@ -4,6 +4,7 @@ using AlomaCare.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250710183859_AddHospitalTreeStructure")]
+    partial class AddHospitalTreeStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace AlomaCare.Migrations
 
                     b.HasIndex("ProvinceId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.CongenitalInfectionOrganism", b =>
@@ -163,7 +166,7 @@ namespace AlomaCare.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("HospitalName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -171,9 +174,6 @@ namespace AlomaCare.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SuburbId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SuburbId1")
                         .HasColumnType("int");
 
                     b.HasKey("HospitalId");
@@ -184,9 +184,7 @@ namespace AlomaCare.Migrations
 
                     b.HasIndex("SuburbId");
 
-                    b.HasIndex("SuburbId1");
-
-                    b.ToTable("Hospitals");
+                    b.ToTable("Hospital");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.Maternal", b =>
@@ -380,8 +378,9 @@ namespace AlomaCare.Migrations
                     b.Property<decimal>("BirthWeight")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConditionAtBirth")
                         .IsRequired()
@@ -425,8 +424,9 @@ namespace AlomaCare.Migrations
                     b.Property<decimal?>("HeadCircumference")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("HospitalId")
-                        .HasColumnType("int");
+                    b.Property<string>("Hospital")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HospitalNumber")
                         .IsRequired()
@@ -474,15 +474,17 @@ namespace AlomaCare.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProvinceId")
-                        .HasColumnType("int");
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SingleOrMultipleBirths")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SuburbId")
-                        .HasColumnType("int");
+                    b.Property<string>("Suburb")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -502,15 +504,7 @@ namespace AlomaCare.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("HospitalId");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.HasIndex("SuburbId");
 
                     b.ToTable("Patients");
                 });
@@ -885,7 +879,7 @@ namespace AlomaCare.Migrations
 
                     b.HasKey("ProvinceId");
 
-                    b.ToTable("Provinces");
+                    b.ToTable("Province");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.SonarFinding", b =>
@@ -917,39 +911,18 @@ namespace AlomaCare.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PostalCode")
                         .HasColumnType("int");
+
+                    b.Property<string>("SuburbName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SuburbId");
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Suburbs");
-                });
-
-            modelBuilder.Entity("AlomaCare.Models.Unit", b =>
-                {
-                    b.Property<int>("UnitId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UnitId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UnitId");
-
-                    b.ToTable("Units");
+                    b.ToTable("Suburb");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.User", b =>
@@ -1043,10 +1016,6 @@ namespace AlomaCare.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("AlomaCare.Models.Suburb", null)
-                        .WithMany("Hospitals")
-                        .HasForeignKey("SuburbId1");
-
                     b.Navigation("City");
 
                     b.Navigation("Province");
@@ -1078,45 +1047,13 @@ namespace AlomaCare.Migrations
 
             modelBuilder.Entity("AlomaCare.Models.Patient", b =>
                 {
-                    b.HasOne("AlomaCare.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("AlomaCare.Models.User", "CreatedByUser")
                         .WithMany("Patients")
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AlomaCare.Models.Hospital", "Hospital")
-                        .WithMany()
-                        .HasForeignKey("HospitalId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("AlomaCare.Models.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("AlomaCare.Models.Suburb", "Suburb")
-                        .WithMany()
-                        .HasForeignKey("SuburbId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
                     b.Navigation("CreatedByUser");
-
-                    b.Navigation("Hospital");
-
-                    b.Navigation("Province");
-
-                    b.Navigation("Suburb");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.PatientCompleteInfo", b =>
@@ -1169,11 +1106,6 @@ namespace AlomaCare.Migrations
             modelBuilder.Entity("AlomaCare.Models.Province", b =>
                 {
                     b.Navigation("Cities");
-                });
-
-            modelBuilder.Entity("AlomaCare.Models.Suburb", b =>
-                {
-                    b.Navigation("Hospitals");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.User", b =>

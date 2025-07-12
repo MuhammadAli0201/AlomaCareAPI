@@ -11,16 +11,24 @@ public class Patient
     public string Surname { get; set; }
     public DateTime DateOfBirth { get; set; }
     public DateTime DateOfAdmission { get; set; }
-    public int AgeOnAdmission { get; set; }
-    public decimal BirthWeight { get; set; }
+    public int? AgeOnAdmission { get; set; }
+    public decimal? BirthWeight { get; set; }
     public string? GestationalUnit { get; set; }
     public int? GestationalAge { get; set; }
     public string Gender { get; set; }
     public string PlaceOfBirth { get; set; }
-    public string Province { get; set; }
-    public string City { get; set; }
-    public string Suburb { get; set; }
-    public string Hospital { get; set; }
+    [ForeignKey(nameof(Province))]
+    public int ProvinceId { get; set; }
+    public Province? Province { get; set; }
+    [ForeignKey(nameof(City))]
+    public int CityId { get; set; }
+    public City? City { get; set; }
+    [ForeignKey(nameof(Suburb))]
+    public int SuburbId { get; set; }
+    public Suburb? Suburb{ get; set; }
+    [ForeignKey(nameof(Hospital))]
+    public int HospitalId { get; set; }
+    public Hospital? Hospital { get; set; }
     public string ModeOfDelivery { get; set; }
     public List<string> InitialResuscitation { get; set; }
     public string OneMinuteApgar { get; set; }
@@ -45,8 +53,8 @@ public class Patient
     public string AvoidableFactors { get; set; }
     [ForeignKey(nameof(CreatedByUser))]
     public int CreatedByUserId { get; set; }
-    public User CreatedByUser { get; set; }
-    public Maternal Maternal { get; set; }
-    public PatientCompleteInfo PatientCompleteInfo { get; set; }
+    public User? CreatedByUser { get; set; }
+    public Maternal? Maternal { get; set; }
+    public PatientCompleteInfo? PatientCompleteInfo { get; set; }
 
 }

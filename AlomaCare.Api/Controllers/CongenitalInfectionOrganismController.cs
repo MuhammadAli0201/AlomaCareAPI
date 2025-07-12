@@ -10,9 +10,9 @@ namespace AlomaCare.Controllers
     [ApiController]
     public class CongenitalInfectionOrganismController : ControllerBase
     {
-        private readonly ICongenitalInfectionOrganism repository;
+        private readonly ICongenitalInfectionOrganismRepository repository;
 
-        public CongenitalInfectionOrganismController(ICongenitalInfectionOrganism repository)
+        public CongenitalInfectionOrganismController(ICongenitalInfectionOrganismRepository repository)
         {
             this.repository = repository;
         }

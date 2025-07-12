@@ -31,6 +31,11 @@ namespace AlomaCare.Context
         public DbSet<Maternal> Maternals { get; set; }
         public DbSet<PatientCompleteInfo> PatientCompleteInfos { get; set; }
         public DbSet<HelpResource> HelpResources { get; set; }
+        public DbSet<Province> Provinces { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Suburb> Suburbs { get; set; }
+        public DbSet<Hospital> Hospitals { get; set; }
+        public DbSet<Unit> Units { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +68,72 @@ namespace AlomaCare.Context
                 .WithOne(c => c.Patient)
                 .HasForeignKey<Maternal>(c => c.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Province)
+                .WithMany()
+                .HasForeignKey(p => p.ProvinceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.City)
+                .WithMany()
+                .HasForeignKey(p => p.CityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Suburb)
+                .WithMany()
+                .HasForeignKey(p => p.SuburbId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Hospital)
+                .WithMany()
+                .HasForeignKey(p => p.HospitalId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Province>()
+                .HasMany(p => p.Cities)
+                .WithOne(c => c.Province)
+                .HasForeignKey(c => c.ProvinceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<City>()
+                .HasOne(p => p.Province)
+                .WithMany(c => c.Cities)
+                .HasForeignKey(c => c.ProvinceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Suburb>()
+                .HasOne(p => p.City)
+                .WithMany(c => c.Suburbs)
+                .HasForeignKey(c => c.CityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Suburb>()
+                .HasOne(p => p.City)
+                .WithMany(c => c.Suburbs)
+                .HasForeignKey(c => c.CityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Hospital>()
+                .HasOne(p => p.Province)
+                .WithMany()
+                .HasForeignKey(c => c.ProvinceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Hospital>()
+                .HasOne(p => p.City)
+                .WithMany()
+                .HasForeignKey(c => c.CityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Hospital>()
+                .HasOne(p => p.Suburb)
+                .WithMany()
+                .HasForeignKey(c => c.SuburbId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<PatientCompleteInfo>()
                 .Property(e => e.CongenitalInfectionOrganism)

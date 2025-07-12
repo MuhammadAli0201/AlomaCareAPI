@@ -10,7 +10,7 @@ public class PatientCompleteInfo
 
     [ForeignKey(nameof(Patient))]
     public Guid PatientId { get; set; }
-    public Patient Patient { get; set; }
+    public Patient? Patient { get; set; }
     public string? NeonatalSepsis { get; set; }
     public string? CongenitalInfection { get; set; }
     public List<int>? CongenitalInfectionOrganism { get; set; }

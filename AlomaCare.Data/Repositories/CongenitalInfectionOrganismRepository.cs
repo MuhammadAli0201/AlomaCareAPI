@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AlomaCare.Data.Repositories
 {
-    public class CongenitalInfectionOrganismRepository : Repository<CongenitalInfectionOrganism>, ICongenitalInfectionOrganism
+    public class CongenitalInfectionOrganismRepository : Repository<CongenitalInfectionOrganism>, ICongenitalInfectionOrganismRepository
     {
         public CongenitalInfectionOrganismRepository(AppDbContext context) : base(context)
         {

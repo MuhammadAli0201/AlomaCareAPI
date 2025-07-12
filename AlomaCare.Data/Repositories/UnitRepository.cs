@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace AlomaCare.Data.Repositories
 {
-    public class FaqRepository : Repository<Faq>, IFaqRepository
+    public class UnitRepository : Repository<Unit>, IUnitRepository
     {
-        public FaqRepository(AppDbContext context) : base(context)
-        {}
+        public UnitRepository(AppDbContext context) : base(context)
+        {
+            
+        }
     }
 }
