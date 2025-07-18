@@ -1,5 +1,6 @@
 ﻿using AlomaCare.Context;
 using AlomaCare.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,19 @@ namespace AlomaCare.Data.Repositories
 {
     public class PatientRepository : Repository<Patient>, IPatientRepository
     {
+        private readonly AppDbContext context;
+
         public PatientRepository(AppDbContext context) : base(context)
         {
+            this.context = context;
+        }
+
+        public async Task<List<Patient>> GetPatientsFromStoredProcedure()
+        {
+            var patients = await context.Patients
+            .FromSqlRaw("EXEC [dbo].[GetAllPatients]")
+            .ToListAsync();
+            return patients;
         }
     }
 }

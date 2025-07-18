@@ -9,5 +9,6 @@ namespace AlomaCare.Data.Repositories
 {
     public interface IPatientRepository : IRepository<Patient>
     {
+        Task<List<Patient>> GetPatientsFromStoredProcedure();
     }
 }

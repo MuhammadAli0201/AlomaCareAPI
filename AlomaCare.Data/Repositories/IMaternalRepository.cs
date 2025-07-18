@@ -10,5 +10,6 @@ namespace AlomaCare.Data.Repositories
     public interface IMaternalRepository : IRepository<Maternal>
     {
         Task<Maternal?> GetByPatientId(Guid patientId);
+        Task<List<Maternal>> GetPatientsFromStoredProcedure();
     }
 }
