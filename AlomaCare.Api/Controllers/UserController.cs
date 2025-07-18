@@ -169,7 +169,7 @@ namespace AlomaCare.Controllers
 
         //method returns list of users that have registered, check swagger api/user
         //Get all the users method that sends a resource to angular only if user is authenticated by the api first
-        //this ensures that the user information is only available to them, we create an api in angular for this.
+        //this ensures that the user information is only available to them, we create an api in angular for this
         [Authorize]     //remove to show list in swagger
         [HttpGet]
         public async Task<ActionResult<User>> GetAllUsers()
@@ -301,7 +301,11 @@ namespace AlomaCare.Controllers
             var user = await _authContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
             if (user == null)
                 return NotFound(new { Message = "User not found" });
-             
+
+            // Get timer setting from DB
+            var setting = await _authContext.SystemSettings.FirstOrDefaultAsync(s => s.Key == "OtpExpiryMinutes");
+            int expiryMinutes = setting != null && int.TryParse(setting.Value, out var minutes) ? minutes : 10;
+
             var otp = new Random().Next(100000, 999999).ToString();
 
             var passwordReset = new PasswordReset
@@ -310,17 +314,49 @@ namespace AlomaCare.Controllers
                 UserId = user.Id,
                 Code = otp,
                 CreatedAtUtc = DateTime.UtcNow,
-                ExpiresAtUtc = DateTime.UtcNow.AddMinutes(10),
+                ExpiresAtUtc = DateTime.UtcNow.AddMinutes(expiryMinutes),
                 IsUsed = false
             };
 
             await _authContext.PasswordResets.AddAsync(passwordReset);
             await _authContext.SaveChangesAsync();
-             
-            await SendEmailAsync(request.Email, "Your OTP Code", $"Your OTP code is: {otp}");
 
-            return Ok(new { Message = "OTP sent to your email" });
+            await SendEmailAsync(request.Email, "Your OTP Code", $"Your OTP code is: {otp}. It expires in {expiryMinutes} minute(s).");
+
+            return Ok(new { Message = "OTP sent to your email", ExpiresInMinutes = expiryMinutes });
         }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpGet("system/otp-timer")]
+        public async Task<IActionResult> GetOtpTimer()
+        {
+            var setting = await _authContext.SystemSettings.FirstOrDefaultAsync(s => s.Key == "OtpExpiryMinutes");
+            return Ok(new { Timer = setting?.Value ?? "10" });
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost("system/otp-timer")]
+        public async Task<IActionResult> UpdateOtpTimer([FromBody] int newMinutes)
+        {
+            if (newMinutes < 1 || newMinutes > 60)
+                return BadRequest(new { Message = "Invalid timer value. Must be between 1 and 60." });
+
+            var setting = await _authContext.SystemSettings.FirstOrDefaultAsync(s => s.Key == "OtpExpiryMinutes");
+            if (setting == null)
+            {
+                setting = new SystemSetting { Key = "OtpExpiryMinutes", Value = newMinutes.ToString() };
+                _authContext.SystemSettings.Add(setting);
+            }
+            else
+            {
+                setting.Value = newMinutes.ToString();
+                _authContext.SystemSettings.Update(setting);
+            }
+
+            await _authContext.SaveChangesAsync();
+            return Ok(new { Message = "OTP timer updated successfully", Timer = newMinutes });
+        }
+
 
         [HttpPost("verify-otp")]
         public async Task<IActionResult> VerifyOtp([FromBody] OtpVerifyRequest request)
@@ -390,13 +426,13 @@ namespace AlomaCare.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("aliawan0201@gmail.com", "krgmnjeaaevefugs"),
+                    Credentials = new NetworkCredential("ameliachetty25@gmail.com", "bjzpksgoswmkagsf"),
                     EnableSsl = true,
                 };
 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("aliawan0201@gmail.com"),
+                    From = new MailAddress("ameliachetty25@gmail.com"),
                     Subject = subject,
                     Body = body,
                     IsBodyHtml = false,

@@ -16,6 +16,9 @@ namespace AlomaCare.Context
 
         public DbSet<User> Users { get; set; }
 
+        //System Tables
+        public DbSet<SystemSetting> SystemSettings { get; set; }
+
 
         //Diagnosis Form CRUDS
         public DbSet<Organism> Organisms { get; set; }
@@ -302,6 +305,10 @@ namespace AlomaCare.Context
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
+
+            modelBuilder.Entity<SystemSetting>().HasData(
+            new SystemSetting { Id = 1, Key = "OtpExpiryMinutes", Value = "10" });
+
 
             base.OnModelCreating(modelBuilder);
         }

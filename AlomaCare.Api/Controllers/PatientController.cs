@@ -134,7 +134,8 @@ namespace AlomaCare.Controllers
                     p.HospitalNumber.Contains(searchInput) ||
                     p.Name.Contains(searchInput) ||
                     p.Surname.Contains(searchInput) ||
-                    p.Gender.Contains(searchInput))
+                    p.OutcomeStatus.Contains(searchInput))
+                   // || p.DateOfAdmission.Contains(searchInput))
                 .ToList();
 
             return Ok(search);
