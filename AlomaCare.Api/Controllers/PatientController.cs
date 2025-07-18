@@ -1,4 +1,5 @@
 ﻿using AlomaCare.Context;
+using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,7 @@ namespace AlomaCare.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PatientController(AppDbContext context) : ControllerBase
+    public class PatientController(AppDbContext context, IPatientRepository patientRepository) : ControllerBase
     {
         [Authorize]
         [HttpPost]
@@ -94,9 +95,10 @@ namespace AlomaCare.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var list = context.Patients.ToList();
+            var list2 = await patientRepository.GetPatientsFromStoredProcedure();
             return Ok(list);
         }
 
@@ -134,7 +136,8 @@ namespace AlomaCare.Controllers
                     p.HospitalNumber.Contains(searchInput) ||
                     p.Name.Contains(searchInput) ||
                     p.Surname.Contains(searchInput) ||
-                    p.Gender.Contains(searchInput))
+                    p.OutcomeStatus.Contains(searchInput))
+                   // || p.DateOfAdmission.Contains(searchInput))
                 .ToList();
 
             return Ok(search);

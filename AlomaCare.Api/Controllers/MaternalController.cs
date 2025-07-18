@@ -105,6 +105,7 @@ public class MaternalController : ControllerBase
     [HttpGet("patientId/{id}")]
     public async Task<IActionResult> GetByPatientId(Guid id)
     {
+        var resposne = await repository.GetPatientsFromStoredProcedure();
         var item = await repository.GetByPatientId(id);
         return Ok(item);
     }
