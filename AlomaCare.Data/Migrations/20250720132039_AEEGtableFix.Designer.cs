@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AlomaCare.Data.Migrations
+namespace AlomaCare.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250716060736_updatedForm")]
-    partial class updatedForm
+    [Migration("20250720132039_AEEGtableFix")]
+    partial class AEEGtableFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1646,6 +1646,35 @@ namespace AlomaCare.Data.Migrations
                     b.HasIndex("CityId");
 
                     b.ToTable("Suburbs");
+                });
+
+            modelBuilder.Entity("AlomaCare.Models.SystemSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SystemSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Key = "OtpExpiryMinutes",
+                            Value = "10"
+                        });
                 });
 
             modelBuilder.Entity("AlomaCare.Models.TypeOfKMCOption", b =>

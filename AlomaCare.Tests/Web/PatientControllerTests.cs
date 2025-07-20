@@ -1,5 +1,6 @@
 ﻿using AlomaCare.Context;
 using AlomaCare.Controllers;
+using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace AlomaCare.Tests.Web
     {
         private readonly AppDbContext _dbContext;
         private readonly PatientController _controller;
+        private readonly PatientRepository patientRepository;
 
         public PatientControllerTests()
         {
@@ -97,8 +99,8 @@ namespace AlomaCare.Tests.Web
             }
         });
             _dbContext.SaveChanges();
-
-            _controller = new PatientController(_dbContext);
+            patientRepository = new PatientRepository(_dbContext);
+            _controller = new PatientController(_dbContext, patientRepository);
 
             // Mock authentication
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
