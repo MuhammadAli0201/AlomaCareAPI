@@ -97,8 +97,7 @@ namespace AlomaCare.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = context.Patients.ToList();
-            var list2 = await patientRepository.GetPatientsFromStoredProcedure();
+            var list = await patientRepository.GetPatientsFromStoredProcedure();
             return Ok(list);
         }
 

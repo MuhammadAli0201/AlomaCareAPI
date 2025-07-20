@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace AlomaCare.Data.Migrations
+namespace AlomaCare.Migrations
 {
     /// <inheritdoc />
-    public partial class AddSystemSettings : Migration
+    public partial class AEEGtableFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
