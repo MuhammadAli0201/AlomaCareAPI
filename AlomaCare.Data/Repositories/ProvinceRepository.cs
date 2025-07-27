@@ -26,5 +26,17 @@ namespace AlomaCare.Data.Repositories
                 .ThenInclude(s => s.Hospitals)
                 .ToListAsync();
         }
+
+        public override async Task<bool> DeleteAsync(object id)
+        {
+            var item = await context.Provinces.FindAsync(id);
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                int rowsAffected = await context.SaveChangesAsync();
+                return rowsAffected > 0;
+            }
+            return false;
+        }
     }
 }

@@ -22,5 +22,17 @@ namespace AlomaCare.Data.Repositories
         {
             return await context.Suburbs.Where(s => s.CityId == cityId).ToListAsync();
         }
+
+        public override async Task<bool> DeleteAsync(object id)
+        {
+            var item = await context.Suburbs.FindAsync(id);
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                int rowsAffected = await context.SaveChangesAsync();
+                return rowsAffected > 0;
+            }
+            return false;
+        }
     }
 }

@@ -7,7 +7,24 @@ namespace AlomaCare.Repositories
 {
     public class FungalOrganismRepository : Repository<FungalOrganism>, IFungalOrganismRepository
     {
-        public FungalOrganismRepository(AppDbContext context) : base(context){}
+        private readonly AppDbContext context;
+
+        public FungalOrganismRepository(AppDbContext context) : base(context)
+        {
+            this.context = context;
+        }
+
+        public override async Task<bool> DeleteAsync(object id)
+        {
+            var item = await context.FungalOrganisms.FindAsync(id);
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                int rowsAffected = await context.SaveChangesAsync();
+                return rowsAffected > 0;
+            }
+            return false;
+        }
     }
 
 }

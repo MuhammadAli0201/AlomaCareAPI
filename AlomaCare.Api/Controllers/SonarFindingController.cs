@@ -80,7 +80,7 @@ namespace AlomaCare.Controllers
             if (sonarfinding == null)
                 return NotFound();
 
-            _context.SonarFindings.Remove(sonarfinding);
+            sonarfinding.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             return NoContent();
