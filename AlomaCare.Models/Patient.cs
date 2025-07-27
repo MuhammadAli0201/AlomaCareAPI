@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using AlomaCare.Models.DTOs;
 
 namespace AlomaCare.Models;
 
@@ -55,6 +56,6 @@ public class Patient
     public int CreatedByUserId { get; set; }
     public User? CreatedByUser { get; set; }
     public Maternal? Maternal { get; set; }
-    public PatientCompleteInfo? PatientCompleteInfo { get; set; }
+    public PatientCompleteInfoDTO? PatientCompleteInfo { get; set; }
 
 }

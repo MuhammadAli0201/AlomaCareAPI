@@ -1,5 +1,6 @@
 ﻿using AlomaCare.Context;
 using AlomaCare.Models;
+using AlomaCare.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Emit;
@@ -32,7 +33,7 @@ namespace AlomaCare.Context
         public DbSet<PasswordReset> PasswordResets { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Maternal> Maternals { get; set; }
-        public DbSet<PatientCompleteInfo> PatientCompleteInfos { get; set; }
+        //public DbSet<PatientCompleteInfo> PatientCompleteInfos { get; set; }
         public DbSet<HelpResource> HelpResources { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -74,6 +75,14 @@ namespace AlomaCare.Context
         public DbSet<OtherNeonatalComplicationCNS> OtherNeonatalComplicationCNSs { get; set; }
         public DbSet<OtherNeonatalComplicationMetabolic> OtherNeonatalComplicationMetabolics { get; set; }
         public DbSet<OtherNeonatalComplicationGlucoseAbnormalities> OtherNeonatalComplicationGlucoseAbnormalitiess { get; set; }
+        public DbSet<LookupCategory> lookupCategories { get; set; }
+        public DbSet<LookupItem> lookupItems { get; set; }
+        public DbSet<NeonatalSepsis> NeonatalSepsis { get; set; }
+        public DbSet<CRIBScore> CRIBScores { get; set; }
+        public DbSet<CranialUltrasoundInfo> CranialUltrasoundInfos { get; set; }
+        public DbSet<RespiratoryComplications> RespiratoryComplications { get; set; }
+        public DbSet<Outcome> Outcomes { get; set; }
+        public DbSet<DiagnosisTreatmentForm> DiagnosisTreatmentForms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,9 +107,9 @@ namespace AlomaCare.Context
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.PatientCompleteInfo)
                 .WithOne(c => c.Patient)
-                .HasForeignKey<PatientCompleteInfo>(c => c.PatientId)
+                .HasForeignKey<PatientCompleteInfoDTO>(c => c.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.Maternal)
                 .WithOne(c => c.Patient)
@@ -173,142 +182,189 @@ namespace AlomaCare.Context
                 .HasForeignKey(c => c.SuburbId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.CongenitalInfectionOrganism)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.BsOrganism)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.SepsisSite)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.FungalOrganism)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.LateSepsisAbx)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.SonarFindings)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<List<int>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.RespiratoryDiagnosis)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.RespSupportAfter)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.AeeGNotDoneReason)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.CoolingNotDoneReason)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.CoolingType)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.TypeNecSurgery)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.RopFindings)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.RopSurgery)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.MetabolicComplications)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.GlucoseAbnormalities)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                       .Property(e => e.OutcomeSection)
                       .HasConversion(
                           v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                          v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                          v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                       .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.FeedsOnDischarge)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<PatientCompleteInfo>()
+            modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.KmcType)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null))
+                    v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null))
                 .HasColumnType("nvarchar(max)");
 
             modelBuilder.Entity<SystemSetting>().HasData(
             new SystemSetting { Id = 1, Key = "OtpExpiryMinutes", Value = "10" });
 
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+             .HasOne(d => d.Patient)
+             .WithOne()
+             .HasForeignKey<DiagnosisTreatmentForm>(d => d.PatientId)
+             .OnDelete(DeleteBehavior.Restrict);
+
+            // DiagnosisTreatmentForm ↔ NeonatalSepsis (1:1)
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+                .HasOne(d => d.NeonatalSepsis)
+                .WithOne()
+                .HasForeignKey<DiagnosisTreatmentForm>(d => d.NeonatalSepsisId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DiagnosisTreatmentForm ↔ CRIBScore (1:1)
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+                .HasOne(d => d.CribScore)
+                .WithOne()
+                .HasForeignKey<DiagnosisTreatmentForm>(d => d.CribScoreId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DiagnosisTreatmentForm ↔ CranialUltrasoundInfo (1:1)
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+                .HasOne(d => d.CranialUltrasoundInfo)
+                .WithOne()
+                .HasForeignKey<DiagnosisTreatmentForm>(d => d.CranialUltrasoundInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DiagnosisTreatmentForm ↔ RespiratoryComplications (1:1)
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+                .HasOne(d => d.RespiratoryComplications)
+                .WithOne()
+                .HasForeignKey<DiagnosisTreatmentForm>(d => d.RespiratoryComplicationsId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DiagnosisTreatmentForm ↔ OtherNeonatalComplication (1:1)
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+                .HasOne(d => d.OtherNeonatalComplication)
+                .WithOne()
+                .HasForeignKey<DiagnosisTreatmentForm>(d => d.OtherNeonatalComplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DiagnosisTreatmentForm ↔ Outcome (1:1)
+            modelBuilder.Entity<DiagnosisTreatmentForm>()
+                .HasOne(d => d.Outcome)
+                .WithOne()
+                .HasForeignKey<DiagnosisTreatmentForm>(d => d.OutcomeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
