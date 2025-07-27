@@ -14,6 +14,12 @@ namespace AlomaCare.Repositories
             this.context = context;
         }
 
+        public override async Task<IEnumerable<FungalOrganism>> GetAsync(string? includeProperties = null)
+        {
+            return await context.FungalOrganisms.FromSqlRaw("EXEC [dbo].[GetAllFungalOrganisms]")
+            .ToListAsync();
+        }
+
         public override async Task<bool> DeleteAsync(object id)
         {
             var item = await context.FungalOrganisms.FindAsync(id);

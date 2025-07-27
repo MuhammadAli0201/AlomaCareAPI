@@ -27,6 +27,12 @@ namespace AlomaCare.Data.Repositories
                 .ToListAsync();
         }
 
+        public override async Task<IEnumerable<Province>> GetAsync(string? includeProperties = null)
+        {
+            return await context.Provinces.FromSqlRaw("EXEC [dbo].[GetAllProvinces]")
+                .ToListAsync();
+        }
+
         public override async Task<bool> DeleteAsync(object id)
         {
             var item = await context.Provinces.FindAsync(id);

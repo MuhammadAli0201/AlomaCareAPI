@@ -1,5 +1,6 @@
 ﻿using AlomaCare.Context;
 using AlomaCare.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,12 @@ namespace AlomaCare.Data.Repositories
         public CongenitalInfectionOrganismRepository(AppDbContext context) : base(context)
         {
             this.context = context;
+        }
+
+        public override async Task<IEnumerable<CongenitalInfectionOrganism>> GetAsync(string? includeProperties = null)
+        {
+            return await context.CongenitalInfectionOrganisms.FromSqlRaw("EXEC [dbo].[GetAllCongenitalInfectionOrganisms]")
+                .ToListAsync();
         }
 
         public override async Task<bool> DeleteAsync(object id)

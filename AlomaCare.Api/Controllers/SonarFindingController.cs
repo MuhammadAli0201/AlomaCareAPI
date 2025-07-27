@@ -20,7 +20,8 @@ namespace AlomaCare.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SonarFinding>>> GetSonarFindings()
         {
-            return await _context.SonarFindings.ToListAsync();
+            return await _context.SonarFindings.FromSqlRaw("EXEC [dbo].[GetAllSonarFindings]")
+                .ToListAsync();
         }
 
         // GET: api/Fungal Organism/5

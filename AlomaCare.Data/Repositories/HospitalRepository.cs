@@ -23,6 +23,12 @@ namespace AlomaCare.Data.Repositories
             return await context.Hospitals.Where(s => s.HospitalId == hospitalId).ToListAsync();
         }
 
+        public override async Task<IEnumerable<Hospital>> GetAsync(string? includeProperties = null)
+        {
+            return await context.Hospitals.FromSqlRaw("EXEC [dbo].[GetAllHospitals]")
+                .ToListAsync();
+        }
+
         public override async Task<bool> DeleteAsync(object id)
         {
             var item = await context.Hospitals.FindAsync(id);

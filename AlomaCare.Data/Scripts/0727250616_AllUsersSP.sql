@@ -1,6 +1,0 @@
-﻿CREATE PROCEDURE GetAllUserRoles
-AS
-BEGIN
-    SELECT * 
-    FROM UserRoles
-END
