@@ -366,6 +366,17 @@ namespace AlomaCare.Context
                 .HasForeignKey<DiagnosisTreatmentForm>(d => d.OutcomeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Organism>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<FungalOrganism>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<Antimicrobial>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<CongenitalInfectionOrganism>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<SonarFinding>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<Province>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<City>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<Suburb>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<Hospital>().HasQueryFilter(s => s.IsDeleted);
+            modelBuilder.Entity<Unit>().HasQueryFilter(s => s.IsDeleted);
+
             base.OnModelCreating(modelBuilder);
         }
     }

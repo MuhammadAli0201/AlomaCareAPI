@@ -12,5 +12,7 @@ namespace AlomaCare.Models
         [Required]
         [StringLength(100)]
         public string FungalOrganismName { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

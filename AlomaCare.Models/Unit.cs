@@ -13,5 +13,6 @@ namespace AlomaCare.Models
         public int UnitId { get; set; }
         public string Name { get; set; }
         public string Reason { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
