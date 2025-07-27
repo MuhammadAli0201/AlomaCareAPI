@@ -13,5 +13,7 @@ namespace AlomaCare.Models
         [Required]
         [StringLength(100)]
         public string CongenitalInfectionOrganismName { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

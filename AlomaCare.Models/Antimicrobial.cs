@@ -12,5 +12,7 @@ namespace AlomaCare.Models
         [Required]
         [StringLength(100)]
         public string AntimicrobialName { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace AlomaCare.Data.Repositories
             return response;
         }
 
-        public async Task<List<Maternal>> GetPatientsFromStoredProcedure()
+        public async Task<List<Maternal>> GetMaternalsFromStoredProcedure()
         {
             var patients = await context.Maternals
             .FromSqlRaw("EXEC [dbo].[GetAllMaternals]")

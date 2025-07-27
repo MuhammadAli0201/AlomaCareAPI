@@ -14,7 +14,9 @@ namespace AlomaCare.Models
         [StringLength(100)]
         public string OrganismName { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         // Navigation properties
-       // public virtual ICollection<DiagnosisOrganism> DiagnosisOrganisms { get; set; }
+        // public virtual ICollection<DiagnosisOrganism> DiagnosisOrganisms { get; set; }
     }
 }

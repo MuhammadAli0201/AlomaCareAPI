@@ -14,6 +14,7 @@ namespace AlomaCare.Models
         public int HospitalId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public bool IsDeleted { get; set; }
         [ForeignKey(nameof(Province))]
         public int ProvinceId { get; set; }
         public Province? Province { get; set; }

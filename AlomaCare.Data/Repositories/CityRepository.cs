@@ -22,5 +22,23 @@ namespace AlomaCare.Data.Repositories
         {
             return await context.Cities.Where(c => c.ProvinceId == provinceId).ToListAsync();
         }
+
+        public override async Task<IEnumerable<City>> GetAsync(string? includeProperties = null)
+        {
+            return await context.Cities.FromSqlRaw("EXEC [dbo].[GetAllCities]")
+                .ToListAsync();
+        }
+
+        public override async Task<bool> DeleteAsync(object id)
+        {
+            var item = await context.Cities.FindAsync(id);
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                int rowsAffected = await context.SaveChangesAsync();
+                return rowsAffected > 0;
+            }
+            return false;
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace AlomaCare.Models
         [Key]
         public int ProvinceId { get; set; }
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
         public List<City> Cities { get; set; } = [];
+
     }
 }

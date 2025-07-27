@@ -55,7 +55,7 @@ namespace AlomaCare.Data.Repositories
             return rowsAffected > 0 ? entity : null;
         }
 
-        public async Task<bool> DeleteAsync(object id)
+        virtual public async Task<bool> DeleteAsync(object id)
         {
             var entity = await dbSet.FindAsync(id);
             if (entity is not null)

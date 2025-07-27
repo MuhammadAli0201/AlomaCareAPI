@@ -87,9 +87,9 @@ public class MaternalController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var list = repository.GetAsync();
+        var list = await repository.GetMaternalsFromStoredProcedure();
         return Ok(list);
     }
 
@@ -105,7 +105,6 @@ public class MaternalController : ControllerBase
     [HttpGet("patientId/{id}")]
     public async Task<IActionResult> GetByPatientId(Guid id)
     {
-        var resposne = await repository.GetPatientsFromStoredProcedure();
         var item = await repository.GetByPatientId(id);
         return Ok(item);
     }

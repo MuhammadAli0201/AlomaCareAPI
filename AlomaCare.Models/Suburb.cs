@@ -12,6 +12,7 @@ namespace AlomaCare.Models
         public int SuburbId { get; set; }
         public string Name { get; set; }
         public int PostalCode { get; set; }
+        public bool IsDeleted { get; set; }
         [ForeignKey(nameof(City))]
         public int CityId { get; set; }
         public City? City { get; set; }
