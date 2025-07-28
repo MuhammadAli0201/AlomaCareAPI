@@ -171,6 +171,7 @@ namespace AlomaCare.Data.Repositories
             outc.HomeOxygen = (dto.HomeOxygen);
             outc.DischargeWeight = dto.DischargeWeight;
             outc.DurationOfStay = dto.DurationOfStay;
+            outc.FileBase64List = dto.FileBase64List;
 
             // 8) Mark entity as modified & save
             context.Update(existing);
@@ -320,7 +321,8 @@ namespace AlomaCare.Data.Repositories
                     FeedsOnDischarge = input.FeedsOnDischarge,
                     HomeOxygen = input.HomeOxygen,
                     DischargeWeight = input.DischargeWeight,
-                    DurationOfStay = input.DurationOfStay
+                    DurationOfStay = input.DurationOfStay,
+                    FileBase64List = input.FileBase64List
                 }
             };
 
@@ -470,7 +472,8 @@ namespace AlomaCare.Data.Repositories
                 FeedsOnDischarge = form.Outcome?.FeedsOnDischarge,
                 HomeOxygen = form.Outcome?.HomeOxygen,
                 DischargeWeight = form.Outcome?.DischargeWeight,
-                DurationOfStay = form.Outcome?.DurationOfStay
+                DurationOfStay = form.Outcome?.DurationOfStay,
+                FileBase64List = form.Outcome?.FileBase64List
             };
         }
     }
