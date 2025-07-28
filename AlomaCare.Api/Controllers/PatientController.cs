@@ -118,6 +118,10 @@ namespace AlomaCare.Controllers
         {
             var patient = context.Patients
                 .Where(p => p.Id == id)
+                .Include(p => p.Province)
+                .Include(p => p.City)
+                .Include(p => p.Suburb)
+                .Include(p => p.Hospital)
                 .FirstOrDefault();
             if (patient == null) return NotFound();
             return Ok(patient);

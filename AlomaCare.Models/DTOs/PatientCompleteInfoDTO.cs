@@ -135,4 +135,5 @@ public class PatientCompleteInfoDTO
     public Guid? HomeOxygen { get; set; }
     public string? DischargeWeight { get; set; }
     public string? DurationOfStay { get; set; }
+    public List<string> FileBase64List { get; set; }
 }
