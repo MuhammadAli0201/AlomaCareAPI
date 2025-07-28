@@ -24,6 +24,11 @@ namespace AlomaCare.Data.Repositories
                 .ToListAsync();
         }
 
+        public override async Task<CongenitalInfectionOrganism?> GetAsync(object id, string? includeProperties = null)
+        {
+            return await context.CongenitalInfectionOrganisms.FindAsync(id);
+        }
+
         public override async Task<bool> DeleteAsync(object id)
         {
             var item = await context.CongenitalInfectionOrganisms.FindAsync(id);
