@@ -18,6 +18,12 @@ namespace AlomaCare.Data.Repositories
             this.context = context;
         }
 
+        public async Task<List<Patient>> GetPatientsByAdmissionMonth(int month)
+        {
+            var patients = await context.Patients.Where(p => p.DateOfAdmission.Month == month).ToListAsync();
+            return patients;
+        }
+
         public async Task<List<Patient>> GetPatientsFromStoredProcedure()
         {
             var patients = await context.Patients

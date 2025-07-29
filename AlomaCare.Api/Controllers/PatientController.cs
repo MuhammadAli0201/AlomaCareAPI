@@ -102,6 +102,14 @@ namespace AlomaCare.Controllers
         }
 
         [Authorize]
+        [HttpGet("admission-month/{month}")]
+        public async Task<IActionResult> GetByMonthAdmission(int month)
+        {
+            var list = await patientRepository.GetPatientsByAdmissionMonth(month);
+            return Ok(list);
+        }
+
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
