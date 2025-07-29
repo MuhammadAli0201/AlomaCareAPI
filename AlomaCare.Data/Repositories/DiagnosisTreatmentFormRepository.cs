@@ -188,7 +188,7 @@ namespace AlomaCare.Data.Repositories
                 PatientId = input.PatientId,
                 NeonatalSepsis = new NeonatalSepsis
                 {
-                    Id = input.CongenitalInfection ?? Guid.NewGuid(), // placeholder mapping
+                    Id = Guid.NewGuid(), // placeholder mapping
                     name = input.NeonatalSepsis,
                     CongenitalInfectionId = input.CongenitalInfection,
                     CongenitalInfectionOrganism = input.CongenitalInfectionOrganism,
@@ -335,8 +335,15 @@ namespace AlomaCare.Data.Repositories
             form.OutcomeId = form.Outcome.Id;
 
             // Save the whole graph
-            context.DiagnosisTreatmentForms.Add(form);
-            await context.SaveChangesAsync();
+            try
+            {
+
+                context.DiagnosisTreatmentForms.Add(form);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e) { 
+            
+            }
 
             return input;
         }
