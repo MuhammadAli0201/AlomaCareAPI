@@ -382,7 +382,8 @@ namespace AlomaCare.Controllers
             if (!user.IsVerified)
             {
                 await _authContext.Users.Where(u => u.Id == user.Id).ExecuteUpdateAsync(
-                    setters => setters.SetProperty(u => u.IsVerified, true));
+                    setters => setters.SetProperty(u => u.IsVerified, true)
+                        .SetProperty(u => u.VerifiedDate, DateTime.UtcNow));
             }
 
             return Ok(new { Message = "OTP verified" });
