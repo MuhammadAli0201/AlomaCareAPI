@@ -277,6 +277,18 @@ namespace AlomaCare.Controllers
         }
 
         [Authorize]
+        [HttpGet("role/{role}/admission-date/{month}")]
+        public async Task<IActionResult> GetUserByRoleAndVerifiedDate(string role, int month)
+        {
+            var result = await _authContext.Users
+                .Where(u => u.IsVerified)
+                .Where(u => u.Role == role)
+                .Where(u => u.VerifiedDate.Month == month)
+                .ToListAsync();
+            return Ok(result);
+        }
+
+        [Authorize]
         [HttpPost("update-role")]
         public async Task<IActionResult> UpdateUserRole([FromBody] UserRole userRole)
         {
