@@ -1,0 +1,34 @@
+﻿using AlomaCare.Data.Repositories;
+using AlomaCare.Models;
+using AlomaCare.Models.DTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AlomaCare.Api.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ReportController : ControllerBase
+    {
+        private readonly IReportRepository repository;
+
+        public ReportController(IReportRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [HttpPost("outcome")]
+        public async Task<ActionResult<ReportDTO>> GetOutcomeReport(DateRangeDTO dateListDTO)
+        {
+            var response = await repository.GetOutcomeReport(dateListDTO);
+            return Ok(response);
+        }
+
+        [HttpPost("sepsis")]
+        public async Task<ActionResult<ReportDTO>> GetSepsisReport(DateRangeDTO dateListDTO)
+        {
+            var response = await repository.GetSepsisReport(dateListDTO);
+            return Ok(response);
+        }
+    }
+}

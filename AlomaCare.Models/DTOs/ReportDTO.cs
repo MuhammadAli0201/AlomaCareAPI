@@ -9,8 +9,7 @@ namespace AlomaCare.Models.DTOs
     public class ReportDTO
     {
         public string ReportType { get; set; }
-        public DateTime ReportMonthAndYear { get; set; }
-        public List<ReportRecordDTO> ReportRecords { get; set; }
+        public List<ReportMonthDTO> MonthlyReports{ get; set; }
         public List<ReportYearTotalsDTO> YearTotals { get; set; }
     }
 }
