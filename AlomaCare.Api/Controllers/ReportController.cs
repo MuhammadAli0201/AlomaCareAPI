@@ -30,5 +30,12 @@ namespace AlomaCare.Api.Controllers
             var response = await repository.GetSepsisReport(dateListDTO);
             return Ok(response);
         }
+
+        [HttpGet("mortality/{year}")]
+        public async Task<ActionResult<ReportDTO>> GetMortalityReport(int year)
+        {
+            var response = await repository.GetYearlyMortalityReport(year);
+            return Ok(response);
+        }
     }
 }

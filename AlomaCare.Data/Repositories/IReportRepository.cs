@@ -13,5 +13,6 @@ namespace AlomaCare.Data.Repositories
     {
         Task<ReportDTO> GetOutcomeReport(DateRangeDTO dateListDTO);
         Task<ReportDTO> GetSepsisReport(DateRangeDTO dateListDTO);
+        Task<MortalityReportDTO> GetYearlyMortalityReport(int year);
     }
 }

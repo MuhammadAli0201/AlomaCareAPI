@@ -40,7 +40,7 @@ namespace AlomaCare.Data.Repositories
                         Admissions = noOfCases,
                         Cases = g.Count(),
                         Category = g.Key,
-                        OutcomeRate = (double)g.Count() / noOfCases
+                        OutcomeRate = ((double)g.Count() / noOfCases) * 100.0
                     }).ToListAsync();
                 var currentCategoryMap = records.GroupBy(r => r.Category)
                     .ToDictionary(g => g.Key, g => (double)g.Sum(g => g.Cases));
@@ -122,7 +122,7 @@ namespace AlomaCare.Data.Repositories
                     Admissions = noOfCases,
                     Cases = m.Value,
                     Category = m.Key,
-                    OutcomeRate = (double)m.Value / noOfCases
+                    OutcomeRate = ((double)m.Value / noOfCases) * 100.0
                 }).ToList();
 
                 var currentCategoryMap = records.GroupBy(r => r.Category)
@@ -163,6 +163,63 @@ namespace AlomaCare.Data.Repositories
             };
 
             return report;
+        }
+
+        public async Task<MortalityReportDTO> GetYearlyMortalityReport(int year)
+        {
+            var monthsDates = Enumerable.Range(1, 12)
+                .Select(month => new DateTime(year, month, 1))
+                .ToList();
+            List<MonthlyMortalityRecordDTO> monthlyRecords = [];
+            foreach(var date in monthsDates)
+            {
+                var month = date.ToString("MMM yyyy").ToUpper();
+                var currentMonthAdmissions = context.Patients
+                    .Where(p => p.DateOfAdmission.Year == date.Year)
+                    .Where(p => p.DateOfAdmission.Month == date.Month).Count();
+                var monthlyRecord = await context.Patients
+                    .Where(p => p.DateOfAdmission.Year == date.Year)
+                    .Where(p => p.DateOfAdmission.Month == date.Month)
+                    .Where(p => p.OutcomeStatus == "Died")
+                    .GroupBy(p => p.OutcomeStatus == "Died")
+                    .Select(g => new MonthlyMortalityRecordDTO
+                    {
+                        Admissions = currentMonthAdmissions,
+                        Deaths = g.Count(),
+                        Month = month,
+                        MortalityRate = ((double)g.Count() / currentMonthAdmissions) * 100.0
+                    }).FirstOrDefaultAsync();
+                if(monthlyRecord != null)
+                {
+                    monthlyRecords.Add(monthlyRecord);
+                }
+                else
+                {
+                    monthlyRecords.Add(new MonthlyMortalityRecordDTO
+                    {
+                        Admissions = currentMonthAdmissions,
+                        Deaths = 0,
+                        Month = month,
+                        MortalityRate = 0
+                    });
+                }
+            }
+            var totalAdmissions = monthlyRecords.Sum(m => m.Admissions);
+            var totalDeaths = monthlyRecords.Sum(m => m.Deaths);
+            var yearlyReport = new YearlyMortalityReportDTO
+            {
+                TotalAdmissions = totalAdmissions,
+                TotalDeaths = totalDeaths,
+                MortalityRate = ((double)totalDeaths/totalAdmissions) * 100.0
+            };
+
+            var mortalityReport = new MortalityReportDTO
+            {
+                MonthlyRecords = monthlyRecords,
+                YearlyReport = yearlyReport
+            };
+
+            return mortalityReport;
         }
 
         private List<DateTime> GetDateRange(DateTime startDate, DateTime endDate)
