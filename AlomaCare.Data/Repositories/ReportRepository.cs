@@ -206,11 +206,12 @@ namespace AlomaCare.Data.Repositories
             }
             var totalAdmissions = monthlyRecords.Sum(m => m.Admissions);
             var totalDeaths = monthlyRecords.Sum(m => m.Deaths);
+            var mortalityRate = totalAdmissions > 0 ? (double)totalDeaths / totalAdmissions : 0;
             var yearlyReport = new YearlyMortalityReportDTO
             {
                 TotalAdmissions = totalAdmissions,
                 TotalDeaths = totalDeaths,
-                MortalityRate = ((double)totalDeaths/totalAdmissions) * 100.0
+                MortalityRate = mortalityRate * 100.0
             };
 
             var mortalityReport = new MortalityReportDTO
