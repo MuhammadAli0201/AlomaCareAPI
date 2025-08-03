@@ -20,7 +20,7 @@ namespace AlomaCare.Data.Repositories
         {
             this.context = context;
         }
-        public async Task<ReportDTO> GetOutcomeReport(DateRangeDTO dateRangeDTO)
+        public async Task<ReportDTO> GetOutcomeReport(CategoryReportDTO dateRangeDTO)
         {
             List<ReportMonthDTO> reportMonthDTOs = [];
             List<DateTime> dates = GetDateRange(dateRangeDTO.Dates[0], dateRangeDTO.Dates[1]);
@@ -101,7 +101,7 @@ namespace AlomaCare.Data.Repositories
             return report;
         }
 
-        public async Task<ReportDTO> GetSepsisReport(DateRangeDTO dateRangeDTO)
+        public async Task<ReportDTO> GetSepsisReport(CategoryReportDTO dateRangeDTO)
         {
             List<ReportMonthDTO> reportMonthDTOs = [];
             List<DateTime> dates = GetDateRange(dateRangeDTO.Dates[0], dateRangeDTO.Dates[1]);

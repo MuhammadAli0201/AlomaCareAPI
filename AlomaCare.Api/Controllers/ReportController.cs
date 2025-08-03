@@ -18,14 +18,14 @@ namespace AlomaCare.Api.Controllers
         }
 
         [HttpPost("outcome")]
-        public async Task<ActionResult<ReportDTO>> GetOutcomeReport(DateRangeDTO dateListDTO)
+        public async Task<ActionResult<ReportDTO>> GetOutcomeReport(CategoryReportDTO dateListDTO)
         {
             var response = await repository.GetOutcomeReport(dateListDTO);
             return Ok(response);
         }
 
         [HttpPost("sepsis")]
-        public async Task<ActionResult<ReportDTO>> GetSepsisReport(DateRangeDTO dateListDTO)
+        public async Task<ActionResult<ReportDTO>> GetSepsisReport(CategoryReportDTO dateListDTO)
         {
             var response = await repository.GetSepsisReport(dateListDTO);
             return Ok(response);

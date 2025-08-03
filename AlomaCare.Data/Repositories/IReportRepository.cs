@@ -11,8 +11,8 @@ namespace AlomaCare.Data.Repositories
 {
     public interface IReportRepository
     {
-        Task<ReportDTO> GetOutcomeReport(DateRangeDTO dateListDTO);
-        Task<ReportDTO> GetSepsisReport(DateRangeDTO dateListDTO);
+        Task<ReportDTO> GetOutcomeReport(CategoryReportDTO dateListDTO);
+        Task<ReportDTO> GetSepsisReport(CategoryReportDTO dateListDTO);
         Task<MortalityReportDTO> GetYearlyMortalityReport(int year);
     }
 }
