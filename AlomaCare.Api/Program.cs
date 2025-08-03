@@ -52,6 +52,7 @@ builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ISuburbRepository, SuburbRepository>();
 builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
 //configured jwt from user controller
 builder.Services.AddAuthentication(x =>
