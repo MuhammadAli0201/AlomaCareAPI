@@ -27,21 +27,40 @@ namespace AlomaCare.Data.Repositories
             Dictionary<string, double> categoryPercentMap = new Dictionary<string, double>();
             foreach(var date in dates)
             {
-                var noOfCases = await context.Patients
-                .Where(p => p.DateOfAdmission.Year == date.Year)
-                .Where(p => p.DateOfAdmission.Month == date.Month)
+                var noOfCases = await context.DiagnosisTreatmentForms
+                .Include(d => d.Patient)
+                .Where(d => d.Patient.DateOfAdmission.Year == date.Year)
+                .Where(d => d.Patient.DateOfAdmission.Month == date.Month)
                 .CountAsync();
-                var records = await context.Patients
-                    .Where(p => p.DateOfAdmission.Year == date.Year)
-                    .Where(p => p.DateOfAdmission.Month == date.Month)
-                    .GroupBy(p => p.OutcomeStatus)
-                    .Select(g => new ReportRecordDTO
+                var diagnosisForms = await context.DiagnosisTreatmentForms
+                    .Include(d => d.Patient)
+                    .Where(d => d.Patient.DateOfAdmission.Year == date.Year)
+                    .Where(d => d.Patient.DateOfAdmission.Month == date.Month)
+                    .Include(d => d.Outcome)
+                    .Select(df => df).ToListAsync();
+                Dictionary<string, int> monthCategoryPercentMap = new Dictionary<string, int>();
+                foreach (var d in diagnosisForms)
+                {
+                    foreach (var outcomeId in d.Outcome.OutcomeSection ?? [])
                     {
-                        Admissions = noOfCases,
-                        Cases = g.Count(),
-                        Category = g.Key,
-                        OutcomeRate = ((double)g.Count() / noOfCases) * 100.0
-                    }).ToListAsync();
+                        var outcome = await context.lookupItems.FindAsync(outcomeId);
+                        if (monthCategoryPercentMap.ContainsKey(outcome?.Name ?? "") && outcome != null)
+                        {
+                            monthCategoryPercentMap[outcome!.Name] += 1;
+                        }
+                        else if (outcome?.Name != null)
+                        {
+                            monthCategoryPercentMap.Add(outcome!.Name, 1);
+                        }
+                    }
+                }
+                var records = monthCategoryPercentMap.Select(m => new ReportRecordDTO
+                {
+                    Admissions = noOfCases,
+                    Cases = m.Value,
+                    Category = m.Key,
+                    OutcomeRate = ((double)m.Value / noOfCases) * 100.0
+                }).ToList();
                 var currentCategoryMap = records.GroupBy(r => r.Category)
                     .ToDictionary(g => g.Key, g => (double)g.Sum(g => g.Cases));
                 foreach(var kv in currentCategoryMap)
