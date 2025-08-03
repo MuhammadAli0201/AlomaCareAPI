@@ -20,10 +20,10 @@ namespace AlomaCare.Data.Repositories
         {
             this.context = context;
         }
-        public async Task<ReportDTO> GetOutcomeReport(CategoryReportDTO dateRangeDTO)
+        public async Task<ReportDTO> GetOutcomeReport(CategoryReportDTO categoryReportDTO)
         {
             List<ReportMonthDTO> reportMonthDTOs = [];
-            List<DateTime> dates = GetDateRange(dateRangeDTO.Dates[0], dateRangeDTO.Dates[1]);
+            List<DateTime> dates = GetDateRange(categoryReportDTO.Dates[0], categoryReportDTO.Dates[1]);
             Dictionary<string, double> categoryPercentMap = new Dictionary<string, double>();
             foreach(var date in dates)
             {
@@ -44,6 +44,8 @@ namespace AlomaCare.Data.Repositories
                     foreach (var outcomeId in d.Outcome.OutcomeSection ?? [])
                     {
                         var outcome = await context.lookupItems.FindAsync(outcomeId);
+                        if (!string.IsNullOrEmpty(categoryReportDTO.Category) && outcome?.Name != categoryReportDTO.Category)
+                            continue;
                         if (monthCategoryPercentMap.ContainsKey(outcome?.Name ?? "") && outcome != null)
                         {
                             monthCategoryPercentMap[outcome!.Name] += 1;
@@ -101,10 +103,10 @@ namespace AlomaCare.Data.Repositories
             return report;
         }
 
-        public async Task<ReportDTO> GetSepsisReport(CategoryReportDTO dateRangeDTO)
+        public async Task<ReportDTO> GetSepsisReport(CategoryReportDTO categoryReportDTO)
         {
             List<ReportMonthDTO> reportMonthDTOs = [];
-            List<DateTime> dates = GetDateRange(dateRangeDTO.Dates[0], dateRangeDTO.Dates[1]);
+            List<DateTime> dates = GetDateRange(categoryReportDTO.Dates[0], categoryReportDTO.Dates[1]);
             Dictionary<string, double> categoryPercentMap = new Dictionary<string, double>();
             foreach (var date in dates)
             {
@@ -125,6 +127,8 @@ namespace AlomaCare.Data.Repositories
                     foreach (var organismId in d.NeonatalSepsis?.BsOrganism ?? [])
                     {
                         var organism = await context.Organisms.FindAsync(organismId);
+                        if (!string.IsNullOrEmpty(categoryReportDTO.Category) && organism?.OrganismName != categoryReportDTO.Category)
+                            continue;
                         if (monthCategoryPercentMap.ContainsKey(organism?.OrganismName ?? "") && organism != null)
                         {
                             monthCategoryPercentMap[organism?.OrganismName] += 1;
