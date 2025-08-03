@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace AlomaCare.Models.DTOs
 {
-    public class DateRangeDTO
+    public class CategoryReportDTO
     {
         public List<DateTime> Dates { get; set; }
+        public string? Category { get; set; }
     }
 }
