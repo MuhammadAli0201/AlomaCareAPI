@@ -25,47 +25,31 @@ namespace AlomaCare.Data.Repositories
             List<ReportMonthDTO> reportMonthDTOs = [];
             List<DateTime> dates = GetDateRange(categoryReportDTO.Dates[0], categoryReportDTO.Dates[1]);
             Dictionary<string, double> categoryPercentMap = new Dictionary<string, double>();
-            foreach(var date in dates)
+            foreach (var date in dates)
             {
-                var noOfCases = await context.DiagnosisTreatmentForms
-                .Include(d => d.Patient)
-                .Where(d => d.Patient.DateOfAdmission.Year == date.Year)
-                .Where(d => d.Patient.DateOfAdmission.Month == date.Month)
+                var noOfCases = await context.Patients
+                .Where(p => p.DateOfAdmission.Year == date.Year)
+                .Where(p => p.DateOfAdmission.Month == date.Month)
                 .CountAsync();
-                var diagnosisForms = await context.DiagnosisTreatmentForms
-                    .Include(d => d.Patient)
-                    .Where(d => d.Patient.DateOfAdmission.Year == date.Year)
-                    .Where(d => d.Patient.DateOfAdmission.Month == date.Month)
-                    .Include(d => d.Outcome)
-                    .Select(df => df).ToListAsync();
-                Dictionary<string, int> monthCategoryPercentMap = new Dictionary<string, int>();
-                foreach (var d in diagnosisForms)
+                var recordsQuery = context.Patients
+                    .Where(p => p.DateOfAdmission.Year == date.Year)
+                    .Where(p => p.DateOfAdmission.Month == date.Month);
+                if (!string.IsNullOrEmpty(categoryReportDTO.Category))
                 {
-                    foreach (var outcomeId in d.Outcome.OutcomeSection ?? [])
-                    {
-                        var outcome = await context.lookupItems.FindAsync(outcomeId);
-                        if (!string.IsNullOrEmpty(categoryReportDTO.Category) && outcome?.Name != categoryReportDTO.Category)
-                            continue;
-                        if (monthCategoryPercentMap.ContainsKey(outcome?.Name ?? "") && outcome != null)
-                        {
-                            monthCategoryPercentMap[outcome!.Name] += 1;
-                        }
-                        else if (outcome?.Name != null)
-                        {
-                            monthCategoryPercentMap.Add(outcome!.Name, 1);
-                        }
-                    }
+                    recordsQuery = recordsQuery.Where(r => r.OutcomeStatus == categoryReportDTO.Category);
                 }
-                var records = monthCategoryPercentMap.Select(m => new ReportRecordDTO
-                {
-                    Admissions = noOfCases,
-                    Cases = m.Value,
-                    Category = m.Key,
-                    OutcomeRate = ((double)m.Value / noOfCases) * 100.0
-                }).ToList();
+                var records = await recordsQuery
+                    .GroupBy(p => p.OutcomeStatus)
+                    .Select(g => new ReportRecordDTO
+                    {
+                        Admissions = noOfCases,
+                        Cases = g.Count(),
+                        Category = g.Key,
+                        OutcomeRate = ((double)g.Count() / noOfCases) * 100.0
+                    }).ToListAsync();
                 var currentCategoryMap = records.GroupBy(r => r.Category)
                     .ToDictionary(g => g.Key, g => (double)g.Sum(g => g.Cases));
-                foreach(var kv in currentCategoryMap)
+                foreach (var kv in currentCategoryMap)
                 {
                     if (categoryPercentMap.ContainsKey(kv.Key))
                     {
@@ -79,7 +63,7 @@ namespace AlomaCare.Data.Repositories
                 reportMonthDTOs.Add(new ReportMonthDTO { ReportMonthAndYear = date, ReportRecords = records });
             }
 
-            foreach(var report1 in reportMonthDTOs)
+            foreach (var report1 in reportMonthDTOs)
             {
                 var records = report1.ReportRecords;
                 var sumOfCases = records.Sum(g => g.Cases);
