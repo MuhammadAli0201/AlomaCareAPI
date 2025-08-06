@@ -1,14 +1,16 @@
-﻿using AlomaCare.Context;
+﻿using AlomaCare.Api.Helpers;
+using AlomaCare.Context;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace AlomaCare.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DiagnosisTreatmentFormController(IDiagnosisTreatmentFormRepository repository) : ControllerBase
+public class DiagnosisTreatmentFormController(IDiagnosisTreatmentFormRepository repository, AppDbContext context) : ControllerBase
 {
 
     [HttpGet("{patientId:guid}")]
@@ -30,10 +32,16 @@ public class DiagnosisTreatmentFormController(IDiagnosisTreatmentFormRepository 
         if (existing == null)
         {
             input.Id = Guid.NewGuid();
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetDiagnosisAuditLog(int.Parse(User.FindFirst(ClaimTypes.Sid).Value), "Create")
+                    );
             await repository.CreateAsync(input);
         }
         else
         {
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetDiagnosisAuditLog(int.Parse(User.FindFirst(ClaimTypes.Sid).Value), "Update")
+                    );
             await repository.UpdateAsync(input);
         }
         return Ok(input);
