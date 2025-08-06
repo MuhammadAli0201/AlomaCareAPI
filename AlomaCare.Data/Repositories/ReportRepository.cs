@@ -100,13 +100,13 @@ namespace AlomaCare.Data.Repositories
                 .CountAsync();
 
                 var diagnosisForms = await (from df in context.DiagnosisTreatmentForms
-                    .Include(d=>d.NeonatalSepsis)
+                    .Include(d => d.NeonatalSepsis)
                     .Include(d => d.Patient)
                     .Where(d => d.Patient.DateOfAdmission.Year == date.Year)
                     .Where(d => d.Patient.DateOfAdmission.Month == date.Month)
-                    select df).ToListAsync();
+                                            select df).ToListAsync();
                 Dictionary<string, int> monthCategoryPercentMap = new Dictionary<string, int>();
-                foreach(var d in diagnosisForms)
+                foreach (var d in diagnosisForms)
                 {
                     foreach (var organismId in d.NeonatalSepsis?.BsOrganism ?? [])
                     {
@@ -117,7 +117,7 @@ namespace AlomaCare.Data.Repositories
                         {
                             monthCategoryPercentMap[organism?.OrganismName] += 1;
                         }
-                        else if(organism != null)
+                        else if (organism != null)
                         {
                             monthCategoryPercentMap.Add(organism.OrganismName, 1);
                         }
@@ -178,7 +178,7 @@ namespace AlomaCare.Data.Repositories
                 .Select(month => new DateTime(year, month, 1))
                 .ToList();
             List<MonthlyMortalityRecordDTO> monthlyRecords = [];
-            foreach(var date in monthsDates)
+            foreach (var date in monthsDates)
             {
                 var month = date.ToString("MMM yyyy").ToUpper();
                 var currentMonthAdmissions = context.Patients
@@ -196,7 +196,7 @@ namespace AlomaCare.Data.Repositories
                         Month = month,
                         MortalityRate = ((double)g.Count() / currentMonthAdmissions) * 100.0
                     }).FirstOrDefaultAsync();
-                if(monthlyRecord != null)
+                if (monthlyRecord != null)
                 {
                     monthlyRecords.Add(monthlyRecord);
                 }

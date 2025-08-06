@@ -84,6 +84,13 @@ namespace AlomaCare.Context
         public DbSet<Outcome> Outcomes { get; set; }
         public DbSet<DiagnosisTreatmentForm> DiagnosisTreatmentForms { get; set; }
 
+        //Calender
+        public DbSet<CalendarNote> CalendarNotes { get; set; }
+
+
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
