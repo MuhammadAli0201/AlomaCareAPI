@@ -1,4 +1,5 @@
-﻿using AlomaCare.Controllers;
+﻿using AlomaCare.Context;
+using AlomaCare.Controllers;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +19,12 @@ namespace AlomaCare.Tests.Web
     {
         private readonly Mock<IMaternalRepository> _maternalRepoMock = new();
         private readonly Mock<IPatientRepository> _patientRepoMock = new();
+        private readonly Mock<AppDbContext> mockContext = new ();
         private readonly MaternalController _controller;
 
         public MaternalControllerTests()
         {
-            _controller = new MaternalController(_maternalRepoMock.Object, _patientRepoMock.Object);
+            _controller = new MaternalController(_maternalRepoMock.Object, _patientRepoMock.Object, mockContext.Object);
 
             // Mock authentication
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -52,11 +54,12 @@ namespace AlomaCare.Tests.Web
 
             var maternalRepoMock = new Mock<IMaternalRepository>();
             var patientRepoMock = new Mock<IPatientRepository>();
+            var contextMock = new Mock<AppDbContext>();
 
             maternalRepoMock.Setup(r => r.GetByPatientId(patientId))
                             .ReturnsAsync(expectedMaternal);
 
-            var controller = new MaternalController(maternalRepoMock.Object, patientRepoMock.Object);
+            var controller = new MaternalController(maternalRepoMock.Object, patientRepoMock.Object, mockContext.Object);
 
             // Act
             var result = await controller.GetByPatientId(patientId);

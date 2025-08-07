@@ -189,6 +189,12 @@ namespace AlomaCare.Context
                 .HasForeignKey(c => c.SuburbId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<PatientCompleteInfoDTO>()
                 .Property(e => e.CongenitalInfectionOrganism)
                 .HasConversion(
