@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCare.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250727135745_AddSoftDeleteOptionInManagedItems")]
-    partial class AddSoftDeleteOptionInManagedItems
+    [Migration("20250807174158_AddUserNavigationPropertyInAuditLog")]
+    partial class AddUserNavigationPropertyInAuditLog
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,8 @@ namespace AlomaCare.Data.Migrations
 
                     b.HasKey("AuditLogId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AuditLogs");
                 });
 
@@ -167,6 +169,26 @@ namespace AlomaCare.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CRIBScores");
+                });
+
+            modelBuilder.Entity("AlomaCare.Models.CalendarNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoteText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CalendarNotes");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.Cardiovascular", b =>
@@ -416,6 +438,10 @@ namespace AlomaCare.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FeedsOnDischarge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("FileBase64List")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FungalOrganism")
@@ -1485,6 +1511,10 @@ namespace AlomaCare.Data.Migrations
                     b.PrimitiveCollection<string>("FeedsOnDischarge")
                         .HasColumnType("nvarchar(max)");
 
+                    b.PrimitiveCollection<string>("FileBase64List")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("HomeOxygen")
                         .HasColumnType("uniqueidentifier");
 
@@ -2116,6 +2146,9 @@ namespace AlomaCare.Data.Migrations
                     b.Property<string>("Usernumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("VerifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("users", (string)null);
@@ -2156,6 +2189,17 @@ namespace AlomaCare.Data.Migrations
                     b.HasKey("WhyaEEGNotDoneOptionId");
 
                     b.ToTable("WhyaEEGNotDoneOptions");
+                });
+
+            modelBuilder.Entity("AlomaCare.Models.AuditLog", b =>
+                {
+                    b.HasOne("AlomaCare.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.City", b =>

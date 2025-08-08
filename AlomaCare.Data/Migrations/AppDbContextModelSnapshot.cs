@@ -88,6 +88,8 @@ namespace AlomaCare.Data.Migrations
 
                     b.HasKey("AuditLogId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AuditLogs");
                 });
 
@@ -164,6 +166,26 @@ namespace AlomaCare.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CRIBScores");
+                });
+
+            modelBuilder.Entity("AlomaCare.Models.CalendarNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoteText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CalendarNotes");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.Cardiovascular", b =>
@@ -2164,6 +2186,17 @@ namespace AlomaCare.Data.Migrations
                     b.HasKey("WhyaEEGNotDoneOptionId");
 
                     b.ToTable("WhyaEEGNotDoneOptions");
+                });
+
+            modelBuilder.Entity("AlomaCare.Models.AuditLog", b =>
+                {
+                    b.HasOne("AlomaCare.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.City", b =>

@@ -84,6 +84,13 @@ namespace AlomaCare.Context
         public DbSet<Outcome> Outcomes { get; set; }
         public DbSet<DiagnosisTreatmentForm> DiagnosisTreatmentForms { get; set; }
 
+        //Calender
+        public DbSet<CalendarNote> CalendarNotes { get; set; }
+
+
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
@@ -180,6 +187,12 @@ namespace AlomaCare.Context
                 .HasOne(p => p.Suburb)
                 .WithMany()
                 .HasForeignKey(c => c.SuburbId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<PatientCompleteInfoDTO>()

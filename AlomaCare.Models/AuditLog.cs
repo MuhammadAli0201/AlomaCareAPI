@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ namespace AlomaCare.Models
         public int AuditLogId { get; set; }
         public DateTime DateTime { get; set; }
         public int UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public User User { get; set; }
         public string ActionType { get; set; }
         public string EntityType { get; set; }
         public string Description { get; set; }

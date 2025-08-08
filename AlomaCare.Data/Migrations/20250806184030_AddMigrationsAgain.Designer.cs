@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCare.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250730180603_AddVerifiedDateColumnInUser")]
-    partial class AddVerifiedDateColumnInUser
+    [Migration("20250806184030_AddMigrationsAgain")]
+    partial class AddMigrationsAgain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -167,6 +167,26 @@ namespace AlomaCare.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CRIBScores");
+                });
+
+            modelBuilder.Entity("AlomaCare.Models.CalendarNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoteText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CalendarNotes");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.Cardiovascular", b =>

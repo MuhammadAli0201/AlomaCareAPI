@@ -1,4 +1,5 @@
-﻿using AlomaCare.Context;
+﻿using AlomaCare.Api.Helpers;
+using AlomaCare.Context;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +17,13 @@ public class MaternalController : ControllerBase
 {
     private readonly IMaternalRepository repository;
     private readonly IPatientRepository patientRepository;
+    private readonly AppDbContext context;
 
-    public MaternalController(IMaternalRepository repository, IPatientRepository patientRepository)
+    public MaternalController(IMaternalRepository repository, IPatientRepository patientRepository, AppDbContext context)
     {
         this.repository = repository;
         this.patientRepository = patientRepository;
+        this.context = context;
     }
 
     [HttpPost]
@@ -73,6 +76,9 @@ public class MaternalController : ControllerBase
             dbEntity.age = maternal.age;
             dbEntity.Race = maternal.Race;
 
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetMaternalAuditLog(int.Parse(User.FindFirst(ClaimTypes.Sid).Value), "Update")
+                    );
             await repository.UpdateAsync(dbEntity);
             return Ok(dbEntity);
         }
@@ -80,7 +86,9 @@ public class MaternalController : ControllerBase
         {
             maternal.Id = Guid.NewGuid();
             maternal.CreatedAt = DateTime.UtcNow;
-
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetMaternalAuditLog(int.Parse(User.FindFirst(ClaimTypes.Sid).Value), "Create")
+                    );
             await repository.AddAsync(maternal);
             return CreatedAtAction(nameof(GetById), new { id = maternal.Id }, maternal);
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AlomaCare.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class moretables : Migration
+    public partial class AddMigrationsAgain : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,8 @@ namespace AlomaCare.Data.Migrations
                 {
                     AntimicrobialID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AntimicrobialName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    AntimicrobialName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,6 +66,20 @@ namespace AlomaCare.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BloodTransfusionOptions", x => x.BloodTransfusionOptionId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CalendarNotes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NoteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NoteText = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalendarNotes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +127,8 @@ namespace AlomaCare.Data.Migrations
                 {
                     CongenitalInfectionOrganismID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CongenitalInfectionOrganismName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    CongenitalInfectionOrganismName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,7 +232,8 @@ namespace AlomaCare.Data.Migrations
                 {
                     FungalOrganismID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FungalOrganismName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    FungalOrganismName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -392,8 +409,8 @@ namespace AlomaCare.Data.Migrations
                     SpecifyOther = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BacterialSepsisBeforeDay3 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BsOrganism = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EarlyAntibiotics = table.Column<int>(type: "int", nullable: false),
-                    SepsisAfterDay3 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EarlyAntibiotics = table.Column<int>(type: "int", nullable: true),
+                    SepsisAfterDay3 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SepsisSite = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BacterialPathogen = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BacterialInfectionLocation = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -419,7 +436,8 @@ namespace AlomaCare.Data.Migrations
                 {
                     OrganismID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrganismName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    OrganismName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -539,7 +557,8 @@ namespace AlomaCare.Data.Migrations
                     FeedsOnDischarge = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HomeOxygen = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DischargeWeight = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DurationOfStay = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DurationOfStay = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileBase64List = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -604,7 +623,8 @@ namespace AlomaCare.Data.Migrations
                 {
                     ProvinceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -710,7 +730,8 @@ namespace AlomaCare.Data.Migrations
                 {
                     SonarFindingID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SonarFindingName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    SonarFindingName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -764,7 +785,8 @@ namespace AlomaCare.Data.Migrations
                     UnitId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -785,7 +807,8 @@ namespace AlomaCare.Data.Migrations
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfileImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsVerified = table.Column<bool>(type: "bit", nullable: false)
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    VerifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -831,7 +854,8 @@ namespace AlomaCare.Data.Migrations
                     CityId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProvinceId = table.Column<int>(type: "int", nullable: false)
+                    ProvinceId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -893,6 +917,7 @@ namespace AlomaCare.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostalCode = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -914,6 +939,7 @@ namespace AlomaCare.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     ProvinceId = table.Column<int>(type: "int", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     SuburbId = table.Column<int>(type: "int", nullable: false),
@@ -1020,6 +1046,66 @@ namespace AlomaCare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DiagnosisTreatmentForms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NeonatalSepsisId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CribScoreId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CranialUltrasoundInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RespiratoryComplicationsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OtherNeonatalComplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OutcomeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DiagnosisTreatmentForms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_CRIBScores_CribScoreId",
+                        column: x => x.CribScoreId,
+                        principalTable: "CRIBScores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_CranialUltrasoundInfos_CranialUltrasoundInfoId",
+                        column: x => x.CranialUltrasoundInfoId,
+                        principalTable: "CranialUltrasoundInfos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_NeonatalSepsis_NeonatalSepsisId",
+                        column: x => x.NeonatalSepsisId,
+                        principalTable: "NeonatalSepsis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_OtherNeonatalComplications_OtherNeonatalComplicationId",
+                        column: x => x.OtherNeonatalComplicationId,
+                        principalTable: "OtherNeonatalComplications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_Outcomes_OutcomeId",
+                        column: x => x.OutcomeId,
+                        principalTable: "Outcomes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DiagnosisTreatmentForms_RespiratoryComplications_RespiratoryComplicationsId",
+                        column: x => x.RespiratoryComplicationsId,
+                        principalTable: "RespiratoryComplications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Maternals",
                 columns: table => new
                 {
@@ -1065,52 +1151,52 @@ namespace AlomaCare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PatientCompleteInfo",
+                name: "PatientCompleteInfoDTO",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NeonatalSepsis = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CongenitalInfection = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CongenitalInfection = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CongenitalInfectionOrganism = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SpecifyOther = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BacterialSepsisBeforeDay3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BacterialSepsisBeforeDay3 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BsOrganism = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EarlyAntibiotics = table.Column<int>(type: "int", nullable: true),
-                    SepsisAfterDay3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SepsisAfterDay3 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SepsisSite = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BacterialPathogen = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BacterialInfectionLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cons = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConsLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BacterialPathogen = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BacterialInfectionLocation = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Cons = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ConsLocation = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OtherBacteria = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FungalSepsis = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BetaDGlucan = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FungalSepsisLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FungalSepsis = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BetaDGlucan = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    FungalSepsisLocation = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FungalOrganism = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LateSepsisAbx = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SpecifyOtherAbx = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AbxDuration = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AbgAvailable = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AbgAvailable = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BaseExcess = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CribWeightGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CribTemp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CribBaseExcess = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CribTotal = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EosCalcDone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EosCalcDone = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EosRisk = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EosRecommendation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EosFollowed = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CranialBefore28 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Ivh = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WorstIvh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EosRecommendation = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EosFollowed = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CranialBefore28 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Ivh = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    WorstIvh = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SonarFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CysticPvl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CysticPvl = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OtherSonarFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RespiratoryDiagnosis = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PneumoLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PneumoLocation = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RespSupportAfter = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HfncHighRate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HfncHighRate = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     HfStart = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HfEnd = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NcpapStart = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1125,70 +1211,71 @@ namespace AlomaCare.Data.Migrations
                     Vent2Start = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Vent2End = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Vent2Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NcpapNoEtt = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SeptalNecrosis = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Ino = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Oxygen28 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Resp28 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SteroidsCld = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Caffeine = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SurfactantInit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SurfactantAny = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NcpapNoEtt = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SeptalNecrosis = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Ino = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Oxygen28 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Resp28 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SteroidsCld = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Caffeine = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SurfactantInit = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SurfactantAny = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SvtDoses = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SvtFirstHours = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SvtFirstMinutes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Chd = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PdaLiti = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PdaIbuprofen = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PdaParacetamol = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InotropicSupport = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HieSection = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PdaLiti = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PdaIbuprofen = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PdaParacetamol = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    InotropicSupport = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    HieSection = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ThomsonScore = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BloodGasResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HieGradeSection = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AeeG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HieGradeSection = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AeeG = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AeeGNotDoneReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AeeGFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CerebralCooling = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CerebralCooling = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CoolingNotDoneReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CoolingType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NecEnterocolitis = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ParenteralNutrition = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NecSurgery = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OtherSurgery = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NecEnterocolitis = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ParenteralNutrition = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    NecSurgery = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OtherSurgery = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     TypeNecSurgery = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SurgeryCode1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SurgeryCode2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SurgeryCode3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SurgeryCode4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RetinopathyPre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RetinopathyPre = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RopFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RopSurgery = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JaundiceRequirement = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExchangeTransfusion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JaundiceRequirement = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ExchangeTransfusion = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     MaxBilirubin = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BloodTransfusion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PlateletTransfusion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PlasmaTransfusion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BloodTransfusion = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PlateletTransfusion = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PlasmaTransfusion = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     MetabolicComplications = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GlucoseAbnormalities = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MajorBirthDefect = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MajorBirthDefect = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DefectCodes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CongenitalAnomaly = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    KangarooCare = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KangarooCare = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     KmcType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OutcomeSection = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HospitalName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FeedsOnDischarge = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HomeOxygen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HomeOxygen = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DischargeWeight = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DurationOfStay = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DurationOfStay = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileBase64List = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientCompleteInfo", x => x.Id);
+                    table.PrimaryKey("PK_PatientCompleteInfoDTO", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PatientCompleteInfo_Patients_PatientId",
+                        name: "FK_PatientCompleteInfoDTO_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
@@ -1204,6 +1291,48 @@ namespace AlomaCare.Data.Migrations
                 name: "IX_Cities_ProvinceId",
                 table: "Cities",
                 column: "ProvinceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_CranialUltrasoundInfoId",
+                table: "DiagnosisTreatmentForms",
+                column: "CranialUltrasoundInfoId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_CribScoreId",
+                table: "DiagnosisTreatmentForms",
+                column: "CribScoreId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_NeonatalSepsisId",
+                table: "DiagnosisTreatmentForms",
+                column: "NeonatalSepsisId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_OtherNeonatalComplicationId",
+                table: "DiagnosisTreatmentForms",
+                column: "OtherNeonatalComplicationId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_OutcomeId",
+                table: "DiagnosisTreatmentForms",
+                column: "OutcomeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_PatientId",
+                table: "DiagnosisTreatmentForms",
+                column: "PatientId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiagnosisTreatmentForms_RespiratoryComplicationsId",
+                table: "DiagnosisTreatmentForms",
+                column: "RespiratoryComplicationsId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hospitals_CityId",
@@ -1242,8 +1371,8 @@ namespace AlomaCare.Data.Migrations
                 columns: new[] { "UserId", "CreatedAtUtc" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatientCompleteInfo_PatientId",
-                table: "PatientCompleteInfo",
+                name: "IX_PatientCompleteInfoDTO_PatientId",
+                table: "PatientCompleteInfoDTO",
                 column: "PatientId",
                 unique: true);
 
@@ -1300,6 +1429,9 @@ namespace AlomaCare.Data.Migrations
                 name: "BloodTransfusionOptions");
 
             migrationBuilder.DropTable(
+                name: "CalendarNotes");
+
+            migrationBuilder.DropTable(
                 name: "Cardiovasculars");
 
             migrationBuilder.DropTable(
@@ -1315,10 +1447,7 @@ namespace AlomaCare.Data.Migrations
                 name: "CoolingTypeOptions");
 
             migrationBuilder.DropTable(
-                name: "CranialUltrasoundInfos");
-
-            migrationBuilder.DropTable(
-                name: "CRIBScores");
+                name: "DiagnosisTreatmentForms");
 
             migrationBuilder.DropTable(
                 name: "ExchangeTranfusionOptions");
@@ -1372,9 +1501,6 @@ namespace AlomaCare.Data.Migrations
                 name: "NeonatalJaundiceRequirementOptions");
 
             migrationBuilder.DropTable(
-                name: "NeonatalSepsis");
-
-            migrationBuilder.DropTable(
                 name: "organisms");
 
             migrationBuilder.DropTable(
@@ -1390,12 +1516,6 @@ namespace AlomaCare.Data.Migrations
                 name: "OtherNeonatalComplicationMetabolics");
 
             migrationBuilder.DropTable(
-                name: "OtherNeonatalComplications");
-
-            migrationBuilder.DropTable(
-                name: "Outcomes");
-
-            migrationBuilder.DropTable(
                 name: "ParacetamolForPDAOptions");
 
             migrationBuilder.DropTable(
@@ -1405,7 +1525,7 @@ namespace AlomaCare.Data.Migrations
                 name: "PasswordResets");
 
             migrationBuilder.DropTable(
-                name: "PatientCompleteInfo");
+                name: "PatientCompleteInfoDTO");
 
             migrationBuilder.DropTable(
                 name: "PDALitigationOptions");
@@ -1415,9 +1535,6 @@ namespace AlomaCare.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ReasonForNotCoolingOptions");
-
-            migrationBuilder.DropTable(
-                name: "RespiratoryComplications");
 
             migrationBuilder.DropTable(
                 name: "RetinopathyOfPrematurityOptions");
@@ -1448,6 +1565,24 @@ namespace AlomaCare.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "WhyaEEGNotDoneOptions");
+
+            migrationBuilder.DropTable(
+                name: "CRIBScores");
+
+            migrationBuilder.DropTable(
+                name: "CranialUltrasoundInfos");
+
+            migrationBuilder.DropTable(
+                name: "NeonatalSepsis");
+
+            migrationBuilder.DropTable(
+                name: "OtherNeonatalComplications");
+
+            migrationBuilder.DropTable(
+                name: "Outcomes");
+
+            migrationBuilder.DropTable(
+                name: "RespiratoryComplications");
 
             migrationBuilder.DropTable(
                 name: "lookupCategories");

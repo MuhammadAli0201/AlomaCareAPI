@@ -1,7 +1,9 @@
-﻿using AlomaCare.Controllers;
+﻿using AlomaCare.Context;
+using AlomaCare.Controllers;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ namespace AlomaCare.Tests.Web
         {
             // Arrange
             var mockRepo = new Mock<DiagnosisTreatmentFormRepository>();
+            var mockContext = new Mock<AppDbContext>();
             var patientId = Guid.NewGuid();
 
             var input = new PatientCompleteInfoDTO
@@ -30,7 +33,7 @@ namespace AlomaCare.Tests.Web
             mockRepo.Setup(r => r.GetByPatientId(patientId))
                     .ReturnsAsync((PatientCompleteInfoDTO)null); // No existing record
 
-            var controller = new DiagnosisTreatmentFormController(mockRepo.Object);
+            var controller = new DiagnosisTreatmentFormController(mockRepo.Object, mockContext.Object);
 
             // Act
             var result = await controller.CreateOrUpdate(input);

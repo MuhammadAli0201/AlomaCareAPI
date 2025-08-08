@@ -1,4 +1,5 @@
-﻿using AlomaCare.Context;
+﻿using AlomaCare.Api.Helpers;
+using AlomaCare.Context;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -73,7 +74,11 @@ namespace AlomaCare.Controllers
                     // Do not update CreatedByUserId for updates
 
                     context.Patients.Update(dbPatient);
+                    await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Update")
+                    );
                     await context.SaveChangesAsync();
+                    
                     return Ok(dbPatient);
                 }
                 else
@@ -82,6 +87,9 @@ namespace AlomaCare.Controllers
                     patient.Id = Guid.NewGuid();
                     patient.CreatedByUserId = int.Parse(userId);
                     await context.Patients.AddAsync(patient);
+                    await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Create")
+                    );
                     await context.SaveChangesAsync();
                     return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
                 }
