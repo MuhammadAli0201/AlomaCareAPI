@@ -22,7 +22,6 @@ namespace AlomaCare.Api.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                // Logic to trigger emails to interns
                 await SendEmailsTointerns(stoppingToken);
                 await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
             }
