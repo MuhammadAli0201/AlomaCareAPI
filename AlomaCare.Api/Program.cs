@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using AlomaCare.Models;
+using AlomaCare.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,7 @@ builder.Services.AddScoped<ISuburbRepository, SuburbRepository>();
 builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddHostedService<InternRotationEndNotificationService>();
 
 //configured jwt from user controller
 builder.Services.AddAuthentication(x =>

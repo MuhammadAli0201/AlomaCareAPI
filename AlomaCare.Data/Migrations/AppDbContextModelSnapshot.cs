@@ -498,6 +498,9 @@ namespace AlomaCare.Data.Migrations
                     b.Property<Guid?>("MajorBirthDefect")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("MarkAsCompleteId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("MaxBilirubin")
                         .HasColumnType("nvarchar(max)");
 
@@ -2058,6 +2061,12 @@ namespace AlomaCare.Data.Migrations
                             Id = 1,
                             Key = "OtpExpiryMinutes",
                             Value = "10"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Key = "InternRemainingRotationDays",
+                            Value = "3"
                         });
                 });
 
