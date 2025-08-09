@@ -1,5 +1,6 @@
 ﻿using AlomaCare.Api.Helpers;
 using AlomaCare.Context;
+using AlomaCare.Data;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -160,6 +161,49 @@ namespace AlomaCare.Controllers
                 .ToList();
 
             return Ok(search);
+        }
+
+        [Authorize]
+        [HttpGet("reject/{id}")]
+        public async Task<IActionResult> RejectPatient(Guid id, string rejectComments)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            if (patient == null) return NotFound();
+
+            patient.RejectComments = rejectComments;
+            patient.MarkAsCompletedId = Constants.MarkAsComplete.Rejected; 
+            context.Patients.Update(patient);
+            await context.SaveChangesAsync();
+
+            return Ok(patient);
+        }
+        
+        [Authorize]
+        [HttpGet("accept/{id}")]
+        public async Task<IActionResult> AcceptPatient(Guid id)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            if (patient == null) return NotFound();
+
+            patient.MarkAsCompletedId = Constants.MarkAsComplete.Accepted; 
+            context.Patients.Update(patient);
+            await context.SaveChangesAsync();
+
+            return Ok(patient);
+        }
+
+        [Authorize]
+        [HttpGet("mark-as-complete/{id}")]
+        public async Task<IActionResult> MarkAsComplete(Guid id)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            if (patient == null) return NotFound();
+
+            patient.MarkAsCompletedId = Constants.MarkAsComplete.Pending; 
+            context.Patients.Update(patient);
+            await context.SaveChangesAsync();
+
+            return Ok(patient);
         }
     }
 }

@@ -136,4 +136,6 @@ public class PatientCompleteInfoDTO
     public string? DischargeWeight { get; set; }
     public string? DurationOfStay { get; set; }
     public List<string> FileBase64List { get; set; }
+
+    public Guid? MarkAsCompleteId { get; set; }
 }

@@ -4,6 +4,7 @@ using AlomaCare.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCare.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250806183239_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,8 +90,6 @@ namespace AlomaCare.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AuditLogId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AuditLogs");
                 });
@@ -1693,7 +1694,7 @@ namespace AlomaCare.Data.Migrations
                     b.Property<decimal?>("LengthAtBirth")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("LookupItem")
+                    b.Property<Guid>("LookupItem")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("MarkAsCompletedId")
@@ -2199,17 +2200,6 @@ namespace AlomaCare.Data.Migrations
                     b.ToTable("WhyaEEGNotDoneOptions");
                 });
 
-            modelBuilder.Entity("AlomaCare.Models.AuditLog", b =>
-                {
-                    b.HasOne("AlomaCare.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("AlomaCare.Models.City", b =>
                 {
                     b.HasOne("AlomaCare.Models.Province", "Province")
@@ -2373,7 +2363,9 @@ namespace AlomaCare.Data.Migrations
 
                     b.HasOne("AlomaCare.Models.LookupItem", "MarkAsCompleted")
                         .WithMany()
-                        .HasForeignKey("LookupItem");
+                        .HasForeignKey("LookupItem")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AlomaCare.Models.Province", "Province")
                         .WithMany()
