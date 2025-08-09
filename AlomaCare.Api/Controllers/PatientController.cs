@@ -76,7 +76,7 @@ namespace AlomaCare.Controllers
 
                     context.Patients.Update(dbPatient);
                     await context.AuditLogs.AddAsync(
-                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Update")
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Updated")
                     );
                     await context.SaveChangesAsync();
                     
@@ -89,7 +89,7 @@ namespace AlomaCare.Controllers
                     patient.CreatedByUserId = int.Parse(userId);
                     await context.Patients.AddAsync(patient);
                     await context.AuditLogs.AddAsync(
-                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Create")
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Created")
                     );
                     await context.SaveChangesAsync();
                     return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
@@ -175,7 +175,7 @@ namespace AlomaCare.Controllers
             patient.MarkAsCompletedId = Constants.MarkAsComplete.Rejected; 
             context.Patients.Update(patient);
             await context.AuditLogs.AddAsync(
-                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Rejected")
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Rejected")
                     );
             await context.SaveChangesAsync();
 
@@ -193,7 +193,7 @@ namespace AlomaCare.Controllers
             patient.MarkAsCompletedId = Constants.MarkAsComplete.Accepted; 
             context.Patients.Update(patient);
             await context.AuditLogs.AddAsync(
-                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Accepted")
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Verified")
                     );
             await context.SaveChangesAsync();
 
