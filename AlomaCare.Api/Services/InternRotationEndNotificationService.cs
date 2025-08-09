@@ -24,7 +24,7 @@ namespace AlomaCare.Api.Services
             {
                 // Logic to trigger emails to interns
                 await SendEmailsTointerns(stoppingToken);
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
             }
         }
 
@@ -33,8 +33,8 @@ namespace AlomaCare.Api.Services
             using var scope = scopeFactory.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            var remainingDays = 1;
-
+            var setting = await dbContext.SystemSettings.FirstOrDefaultAsync(s => s.Key == "InternRemainingRotationDays");
+            int remainingDays = int.Parse(setting.Value);
             var targetDate = DateTime.UtcNow.Date.AddDays(remainingDays);
             var rotationEndingInterns = await dbContext.Users
                 .Where(u => u.Role == "Intern")
@@ -43,7 +43,7 @@ namespace AlomaCare.Api.Services
 
             foreach(var intern in rotationEndingInterns)
             {
-                await SendEmailAsync(intern.Email, "End of rotation notification ",
+                await SendEmailAsync(intern.Email, "End of rotation notification " + intern.FirstName,
                     $"Dear {intern.FirstName} {intern.LastName},\nYour rotation is ending on {intern.VerifiedDate.AddMonths(3)}");
                 Console.WriteLine($"Email is sent to {intern.Email} at {DateTime.UtcNow}");
             }

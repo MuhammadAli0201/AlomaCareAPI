@@ -59,7 +59,7 @@ namespace AlomaCare.Tests.Web
             maternalRepoMock.Setup(r => r.GetByPatientId(patientId))
                             .ReturnsAsync(expectedMaternal);
 
-            var controller = new MaternalController(maternalRepoMock.Object, patientRepoMock.Object, mockContext.Object);
+            var controller = new MaternalController(maternalRepoMock.Object, patientRepoMock.Object, contextMock.Object);
 
             // Act
             var result = await controller.GetByPatientId(patientId);

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace AlomaCare.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class FixMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,23 +38,6 @@ namespace AlomaCare.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Antimicrobials", x => x.AntimicrobialID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuditLogs",
-                columns: table => new
-                {
-                    AuditLogId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ActionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EntityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuditLogs", x => x.AuditLogId);
                 });
 
             migrationBuilder.CreateTable(
@@ -869,6 +854,28 @@ namespace AlomaCare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AuditLogs",
+                columns: table => new
+                {
+                    AuditLogId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ActionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuditLogs", x => x.AuditLogId);
+                    table.ForeignKey(
+                        name: "FK_AuditLogs_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PasswordResets",
                 columns: table => new
                 {
@@ -1013,7 +1020,7 @@ namespace AlomaCare.Data.Migrations
                     NeonatalCauseOfDeath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AvoidableFactors = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedByUserId = table.Column<int>(type: "int", nullable: false),
-                    LookupItem = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LookupItem = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     MarkAsCompletedId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RejectComments = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -1044,8 +1051,7 @@ namespace AlomaCare.Data.Migrations
                         name: "FK_Patients_lookupItems_LookupItem",
                         column: x => x.LookupItem,
                         principalTable: "lookupItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Patients_users_CreatedByUserId",
                         column: x => x.CreatedByUserId,
@@ -1278,7 +1284,8 @@ namespace AlomaCare.Data.Migrations
                     HomeOxygen = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DischargeWeight = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DurationOfStay = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FileBase64List = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FileBase64List = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MarkAsCompleteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1294,7 +1301,16 @@ namespace AlomaCare.Data.Migrations
             migrationBuilder.InsertData(
                 table: "SystemSettings",
                 columns: new[] { "Id", "Key", "Value" },
-                values: new object[] { 1, "OtpExpiryMinutes", "10" });
+                values: new object[,]
+                {
+                    { 1, "OtpExpiryMinutes", "10" },
+                    { 2, "InternRemainingRotationDays", "3" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_UserId",
+                table: "AuditLogs",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_ProvinceId",

@@ -331,6 +331,9 @@ namespace AlomaCare.Context
             modelBuilder.Entity<SystemSetting>().HasData(
             new SystemSetting { Id = 1, Key = "OtpExpiryMinutes", Value = "10" });
 
+            modelBuilder.Entity<SystemSetting>().HasData(
+            new SystemSetting { Id = 2, Key = "InternRemainingRotationDays", Value = "3" });
+
             modelBuilder.Entity<DiagnosisTreatmentForm>()
              .HasOne(d => d.Patient)
              .WithOne()

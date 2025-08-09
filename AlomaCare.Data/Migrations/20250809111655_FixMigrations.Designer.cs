@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCare.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250807174158_AddUserNavigationPropertyInAuditLog")]
-    partial class AddUserNavigationPropertyInAuditLog
+    [Migration("20250809111655_FixMigrations")]
+    partial class FixMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -499,6 +499,9 @@ namespace AlomaCare.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("MajorBirthDefect")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MarkAsCompleteId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MaxBilirubin")
@@ -1696,6 +1699,12 @@ namespace AlomaCare.Data.Migrations
                     b.Property<decimal?>("LengthAtBirth")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("LookupItem")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MarkAsCompletedId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ModeOfDelivery")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1731,6 +1740,9 @@ namespace AlomaCare.Data.Migrations
                     b.Property<int>("ProvinceId")
                         .HasColumnType("int");
 
+                    b.Property<string>("RejectComments")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SingleOrMultipleBirths")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1761,6 +1773,8 @@ namespace AlomaCare.Data.Migrations
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("HospitalId");
+
+                    b.HasIndex("LookupItem");
 
                     b.HasIndex("ProvinceId");
 
@@ -2050,6 +2064,12 @@ namespace AlomaCare.Data.Migrations
                             Id = 1,
                             Key = "OtpExpiryMinutes",
                             Value = "10"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Key = "InternRemainingRotationDays",
+                            Value = "3"
                         });
                 });
 
@@ -2363,6 +2383,10 @@ namespace AlomaCare.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("AlomaCare.Models.LookupItem", "MarkAsCompleted")
+                        .WithMany()
+                        .HasForeignKey("LookupItem");
+
                     b.HasOne("AlomaCare.Models.Province", "Province")
                         .WithMany()
                         .HasForeignKey("ProvinceId")
@@ -2380,6 +2404,8 @@ namespace AlomaCare.Data.Migrations
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("Hospital");
+
+                    b.Navigation("MarkAsCompleted");
 
                     b.Navigation("Province");
 
