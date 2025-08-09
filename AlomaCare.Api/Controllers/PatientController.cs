@@ -168,11 +168,15 @@ namespace AlomaCare.Controllers
         public async Task<IActionResult> RejectPatient(Guid id, string rejectComments)
         {
             var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
-            if (patient == null) return NotFound();
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (patient == null || userId == null) return NotFound();
 
             patient.RejectComments = rejectComments;
             patient.MarkAsCompletedId = Constants.MarkAsComplete.Rejected; 
             context.Patients.Update(patient);
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Rejected")
+                    );
             await context.SaveChangesAsync();
 
             return Ok(patient);
@@ -183,10 +187,14 @@ namespace AlomaCare.Controllers
         public async Task<IActionResult> AcceptPatient(Guid id)
         {
             var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
-            if (patient == null) return NotFound();
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (patient == null || userId == null) return NotFound();
 
             patient.MarkAsCompletedId = Constants.MarkAsComplete.Accepted; 
             context.Patients.Update(patient);
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Accepted")
+                    );
             await context.SaveChangesAsync();
 
             return Ok(patient);
@@ -197,10 +205,14 @@ namespace AlomaCare.Controllers
         public async Task<IActionResult> MarkAsComplete(Guid id)
         {
             var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
-            if (patient == null) return NotFound();
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (patient == null || userId == null) return NotFound();
 
             patient.MarkAsCompletedId = Constants.MarkAsComplete.Pending; 
             context.Patients.Update(patient);
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Marked As Completed")
+                    );
             await context.SaveChangesAsync();
 
             return Ok(patient);
