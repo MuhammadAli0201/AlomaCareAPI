@@ -42,6 +42,7 @@ namespace AlomaCare.Data.Repositories
                 .Include(x => x.RespiratoryComplications)
                 .Include(x => x.OtherNeonatalComplication)
                 .Include(x => x.Outcome)
+                .Include(x => x.Patient)
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
             if (existing == null) return null;

@@ -22,6 +22,7 @@ namespace AlomaCare.Api.Controllers
         {
             var response = await context.AuditLogs
                 .Include(a=>a.User)
+                .OrderByDescending(x => x.DateTime)
                 .ToListAsync();
             return Ok(response);
         }

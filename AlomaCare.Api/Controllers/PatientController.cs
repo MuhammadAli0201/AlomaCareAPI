@@ -1,5 +1,6 @@
 ﻿using AlomaCare.Api.Helpers;
 using AlomaCare.Context;
+using AlomaCare.Data;
 using AlomaCare.Data.Repositories;
 using AlomaCare.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -75,7 +76,7 @@ namespace AlomaCare.Controllers
 
                     context.Patients.Update(dbPatient);
                     await context.AuditLogs.AddAsync(
-                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Update")
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Updated")
                     );
                     await context.SaveChangesAsync();
                     
@@ -88,7 +89,7 @@ namespace AlomaCare.Controllers
                     patient.CreatedByUserId = int.Parse(userId);
                     await context.Patients.AddAsync(patient);
                     await context.AuditLogs.AddAsync(
-                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Create")
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Created")
                     );
                     await context.SaveChangesAsync();
                     return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
@@ -160,6 +161,61 @@ namespace AlomaCare.Controllers
                 .ToList();
 
             return Ok(search);
+        }
+
+        [Authorize]
+        [HttpGet("reject/{id}")]
+        public async Task<IActionResult> RejectPatient(Guid id, string rejectComments)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (patient == null || userId == null) return NotFound();
+
+            patient.RejectComments = rejectComments;
+            patient.MarkAsCompletedId = Constants.MarkAsComplete.Rejected; 
+            context.Patients.Update(patient);
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Rejected")
+                    );
+            await context.SaveChangesAsync();
+
+            return Ok(patient);
+        }
+        
+        [Authorize]
+        [HttpGet("accept/{id}")]
+        public async Task<IActionResult> AcceptPatient(Guid id)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (patient == null || userId == null) return NotFound();
+
+            patient.MarkAsCompletedId = Constants.MarkAsComplete.Accepted; 
+            context.Patients.Update(patient);
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Record Verified")
+                    );
+            await context.SaveChangesAsync();
+
+            return Ok(patient);
+        }
+
+        [Authorize]
+        [HttpGet("mark-as-complete/{id}")]
+        public async Task<IActionResult> MarkAsComplete(Guid id)
+        {
+            var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (patient == null || userId == null) return NotFound();
+
+            patient.MarkAsCompletedId = Constants.MarkAsComplete.Pending; 
+            context.Patients.Update(patient);
+            await context.AuditLogs.AddAsync(
+                        AuditLogHelper.GetPatientAuditLog(int.Parse(userId), "Marked As Completed")
+                    );
+            await context.SaveChangesAsync();
+
+            return Ok(patient);
         }
     }
 }

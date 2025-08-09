@@ -54,6 +54,10 @@ public class Patient
     public string AvoidableFactors { get; set; }
     [ForeignKey(nameof(CreatedByUser))]
     public int CreatedByUserId { get; set; }
+    [ForeignKey(nameof(LookupItem))]
+    public LookupItem? MarkAsCompleted { get; set; }
+    public Guid? MarkAsCompletedId {  get; set; }
+    public string? RejectComments { get; set; }
     public User? CreatedByUser { get; set; }
     public Maternal? Maternal { get; set; }
     public PatientCompleteInfoDTO? PatientCompleteInfo { get; set; }

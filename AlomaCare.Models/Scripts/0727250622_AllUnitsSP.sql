@@ -1,0 +1,7 @@
+﻿CREATE PROCEDURE GetAllUnits
+AS
+BEGIN
+    SELECT * 
+    FROM Units
+	WHERE IsDeleted = 0
+END
