@@ -4,6 +4,7 @@ using AlomaCare.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlomaCare.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250806185817_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,8 +90,6 @@ namespace AlomaCare.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AuditLogId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AuditLogs");
                 });
@@ -2197,17 +2198,6 @@ namespace AlomaCare.Data.Migrations
                     b.HasKey("WhyaEEGNotDoneOptionId");
 
                     b.ToTable("WhyaEEGNotDoneOptions");
-                });
-
-            modelBuilder.Entity("AlomaCare.Models.AuditLog", b =>
-                {
-                    b.HasOne("AlomaCare.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AlomaCare.Models.City", b =>

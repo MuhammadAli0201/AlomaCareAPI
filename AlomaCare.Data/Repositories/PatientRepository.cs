@@ -29,6 +29,13 @@ namespace AlomaCare.Data.Repositories
             var patients = await context.Patients
             .FromSqlRaw("EXEC [dbo].[GetAllPatients]")
             .ToListAsync();
+
+            foreach(var p in patients)
+            {
+                p.Maternal = await context.Maternals
+                    .FirstOrDefaultAsync(m => m.PatientId == p.Id);
+            }
+
             return patients;
         }
     }
